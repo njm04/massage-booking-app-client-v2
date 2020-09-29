@@ -7,7 +7,6 @@ import { Button } from "react-bootstrap";
 // import TableHeader from "./common/tableHeader";
 // import TableBody from "./common/tableBody";
 import Table from "./common/table";
-import NavBar from "./common/navBar";
 import { getUser } from "../store/auth";
 
 const AppointmentsTable = () => {
@@ -48,7 +47,6 @@ const AppointmentsTable = () => {
 
   return (
     <>
-      <NavBar />
       <Table columns={columns} data={appointments} />
       {/* <Table striped bordered hover>
         <TableHeader columns={columns} />
