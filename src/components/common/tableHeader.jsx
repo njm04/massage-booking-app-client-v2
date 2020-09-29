@@ -5,8 +5,10 @@ const TableHeader = (props) => {
   return (
     <thead>
       <tr>
-        {columns.map((column, index) => (
-          <th key={index}> {column.label}</th>
+        {columns.map((column) => (
+          <th key={column.path || column.key}>
+            {column.label ? column.label : ""}
+          </th>
         ))}
       </tr>
     </thead>
