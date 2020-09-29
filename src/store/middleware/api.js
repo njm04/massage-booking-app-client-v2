@@ -6,7 +6,7 @@ const api = ({ dispatch }) => (next) => async (action) => {
 
   const { url, method, onSuccess } = action.payload;
 
-  // next(action);
+  next(action);
 
   try {
     const response = await axios.request({
