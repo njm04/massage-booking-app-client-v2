@@ -3,6 +3,7 @@ import { Navbar, Nav } from "react-bootstrap";
 import Logout from "../common/logout";
 import { getUser } from "../../store/auth";
 import { useSelector } from "react-redux";
+import { Link } from "@reach/router";
 
 const NavBar = () => {
   const user = useSelector(getUser);
@@ -12,9 +13,12 @@ const NavBar = () => {
     <Navbar bg="dark" variant="dark">
       <Navbar.Brand href="#home">Navbar</Navbar.Brand>
       <Nav className="mr-auto">
-        <Nav.Link href="#home">Home</Nav.Link>
-        <Nav.Link href="#features">Features</Nav.Link>
-        <Nav.Link href="#pricing">Pricing</Nav.Link>
+        <Link className="nav-link" to="/dashboard">
+          Appointments
+        </Link>
+        <Link className="nav-link" to="/book-appointment">
+          Book Appointment
+        </Link>
       </Nav>
       {/* <Form inline>
       <FormControl type="text" placeholder="Search" className="mr-sm-2" />
