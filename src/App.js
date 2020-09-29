@@ -1,18 +1,30 @@
 import React from "react";
 import "./App.css";
-import Login from "./components/login";
+import { Provider } from "react-redux";
+import { Router, Link } from "@reach/router";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AppointmentsTable from "./components/appointmentsTable";
 import configureStore from "./store/configureStore";
-import { Provider } from "react-redux";
+import Login from "./components/login";
+import auth from "./services/authService";
+import PrivateRoute from "./components/common/privateRoute";
 
 const store = configureStore();
 
+auth.setCurrentUser(store);
+
 function App() {
+  const user = auth.getCurrentUser();
+
   return (
     <Provider store={store}>
       <div className="App">
-        {/* <Login /> */}
-        <AppointmentsTable />
+        <ToastContainer />
+        <Router>
+          <Login path="/" />
+          <PrivateRoute as={AppointmentsTable} path="/dashboard" user={user} />
+        </Router>
       </div>
     </Provider>
   );
