@@ -4,7 +4,7 @@ import * as actions from "../api";
 const api = ({ dispatch }) => (next) => async (action) => {
   if (action.type !== actions.apiCallBegan.type) return next(action);
 
-  const { url, method, onSuccess } = action.payload;
+  const { url, method, onSuccess, data } = action.payload;
 
   next(action);
 
@@ -13,6 +13,7 @@ const api = ({ dispatch }) => (next) => async (action) => {
       baseURL: "http://localhost:5000/api",
       url,
       method,
+      data,
     });
 
     dispatch(actions.apiCallSuccess(response.data));
