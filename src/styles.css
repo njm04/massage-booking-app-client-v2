@@ -4,3 +4,12 @@
   display: block;
   width: 100%;
 }
+
+.error-message {
+  color: #bf1650;
+}
+
+.error-message::before {
+  display: inline;
+  content: "⚠ ";
+}
