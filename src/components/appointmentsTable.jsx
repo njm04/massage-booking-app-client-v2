@@ -7,13 +7,10 @@ import { Button } from "react-bootstrap";
 // import TableHeader from "./common/tableHeader";
 // import TableBody from "./common/tableBody";
 import Table from "./common/table";
-import { getUser } from "../store/auth";
 
 const AppointmentsTable = () => {
   const dispatch = useDispatch();
   const appointments = useSelector(getAppointments);
-  const user = useSelector(getUser);
-  console.log(user);
 
   const columns = [
     { label: "Name", path: "name" },
