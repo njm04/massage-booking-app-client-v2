@@ -36,6 +36,8 @@ const massageTypes = [
 
 const BookAppointmentForm = () => {
   const user = useSelector(getUser);
+  const therapists = useSelector(getTherapists);
+  const dispatch = useDispatch();
   const { firstName, lastName } = user;
 
   const defaultValues = {
@@ -47,25 +49,34 @@ const BookAppointmentForm = () => {
     city: "Banff",
     zip: "",
     duration: 60,
-    date: setHours(setMinutes(new Date(), 30), 16),
+    date: "",
     contactNumber: "",
     massageType: "Whole body massage",
     therapist: "",
   };
-  const { register, handleSubmit, watch, errors, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    errors,
+    control,
+    reset,
+    formState: { isSubmitSuccessful },
+  } = useForm({
     resolver: yupResolver(bookAppoinmentFormSchema),
     defaultValues,
   });
-
-  const therapists = useSelector(getTherapists);
-  const dispatch = useDispatch();
 
   // watch value of province field and dynamically get city based on that
   const cities = getCities(watch("state"));
 
   useEffect(() => {
     dispatch(loadUsers());
-  }, [dispatch]);
+  }, [dispatch, therapists]);
+
+  useEffect(() => {
+    if (isSubmitSuccessful) reset(defaultValues);
+  }, [isSubmitSuccessful, reset, defaultValues]);
 
   const concat = (item) => {
     return `${item.firstName} ${item.lastName}`;
@@ -73,7 +84,7 @@ const BookAppointmentForm = () => {
 
   const onSubmit = (data) => {
     console.log("data: ", data);
-    const d = _.pick(data, [
+    const appointment = _.pick(data, [
       "address",
       "addressTwo",
       "city",
@@ -85,8 +96,8 @@ const BookAppointmentForm = () => {
       "therapist",
       "zip",
     ]);
-    console.log(d);
-    dispatch(addAppointment(d));
+    console.log(appointment);
+    dispatch(addAppointment(appointment));
   };
 
   return (
@@ -186,24 +197,22 @@ const BookAppointmentForm = () => {
                   </Form.Group>
                 </Form.Row>
                 <Form.Row>
-                  <Form.Group as={Col} controlId="duration">
-                    <Form.Label>Duration</Form.Label>
-                    <Form.Control as="select" name="duration" ref={register}>
-                      {massageDuration.map((duration) => (
-                        <option
-                          value={duration.massageDuration}
-                          key={duration.massageDuration}
-                        >
-                          {duration.label}
+                  <Form.Group as={Col} controlId="therapist">
+                    <Form.Label>Therapists</Form.Label>
+                    <Form.Control as="select" name="therapist" ref={register}>
+                      {therapists.map((therapist) => (
+                        <option value={therapist._id} key={therapist._id}>
+                          {concat(therapist)}
                         </option>
                       ))}
                     </Form.Control>
-                    {errors.duration && (
-                      <Alert variant="danger">{errors.duration.message}</Alert>
+                    {errors.therapist && (
+                      <Alert variant="danger">{errors.therapist.message}</Alert>
                     )}
                   </Form.Group>
                   <Form.Group as={Col} controlId="dateTime">
                     <Form.Label>Date/Time</Form.Label>
+                    {/* validation not working */}
                     <Controller
                       control={control}
                       name="date"
@@ -220,16 +229,20 @@ const BookAppointmentForm = () => {
                       </Alert>
                     )}
                   </Form.Group>
-                  <Form.Group as={Col} controlId="contactNumber">
-                    <Input
-                      name="contactNumber"
-                      label="Contact Numbe"
-                      register={register}
-                    />
-                    {errors.contactNumber && (
-                      <Alert variant="danger">
-                        {errors.contactNumber.message}
-                      </Alert>
+                  <Form.Group as={Col} controlId="duration">
+                    <Form.Label>Duration</Form.Label>
+                    <Form.Control as="select" name="duration" ref={register}>
+                      {massageDuration.map((duration) => (
+                        <option
+                          value={duration.massageDuration}
+                          key={duration.massageDuration}
+                        >
+                          {duration.label}
+                        </option>
+                      ))}
+                    </Form.Control>
+                    {errors.duration && (
+                      <Alert variant="danger">{errors.duration.message}</Alert>
                     )}
                   </Form.Group>
                 </Form.Row>
@@ -249,17 +262,16 @@ const BookAppointmentForm = () => {
                       </Alert>
                     )}
                   </Form.Group>
-                  <Form.Group as={Col} controlId="therapist">
-                    <Form.Label>Therapists</Form.Label>
-                    <Form.Control as="select" name="therapist" ref={register}>
-                      {therapists.map((therapist) => (
-                        <option value={therapist._id} key={therapist._id}>
-                          {concat(therapist)}
-                        </option>
-                      ))}
-                    </Form.Control>
-                    {errors.therapist && (
-                      <Alert variant="danger">{errors.therapist.message}</Alert>
+                  <Form.Group as={Col} controlId="contactNumber">
+                    <Input
+                      name="contactNumber"
+                      label="Contact Number"
+                      register={register}
+                    />
+                    {errors.contactNumber && (
+                      <Alert variant="danger">
+                        {errors.contactNumber.message}
+                      </Alert>
                     )}
                   </Form.Group>
                 </Form.Row>
