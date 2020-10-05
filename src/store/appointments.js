@@ -6,6 +6,7 @@ const slice = createSlice({
   name: "appointments",
   initialState: {
     list: [],
+    loading: false,
   },
   reducers: {
     appointmentsReceived: (appointments, action) => {
@@ -13,11 +14,23 @@ const slice = createSlice({
     },
     appointmentAdded: (appointments, action) => {
       appointments.list.push(action.payload);
+      appointments.loading = false;
+    },
+    appointmentAddRequested: (appointments, action) => {
+      appointments.loading = true;
+    },
+    appointmentAddFailed: (appointments, action) => {
+      appointments.loading = false;
     },
   },
 });
 
-const { appointmentsReceived, appointmentAdded } = slice.actions;
+const {
+  appointmentsReceived,
+  appointmentAdded,
+  appointmentAddRequested,
+  appointmentAddFailed,
+} = slice.actions;
 export default slice.reducer;
 const url = "/bookings";
 export const loadAppointments = () => (dispatch, getState) => {
@@ -36,7 +49,9 @@ export const addAppointment = (appointment) => {
     url,
     method: "POST",
     data: appointment,
+    onStart: appointmentAddRequested.type,
     onSuccess: appointmentAdded.type,
+    onError: appointmentAddFailed.type,
   });
 };
 
