@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Col, Button, Card, Alert } from "react-bootstrap";
-import { setHours, setMinutes } from "date-fns";
 import _ from "lodash";
 
 // TODO: get states/provinces data from backend instead of json file
@@ -39,7 +38,7 @@ const BookAppointmentForm = () => {
   const therapists = useSelector(getTherapists);
   const dispatch = useDispatch();
   const { firstName, lastName } = user;
-
+  const [therapistSched, setTherapistSched] = useState([]);
   const defaultValues = {
     firstName: firstName,
     lastName: lastName,
@@ -67,23 +66,31 @@ const BookAppointmentForm = () => {
     defaultValues,
   });
 
+  const therapistId = watch("therapist");
+  const getTherapistsSchedules = () => {
+    const therapist = therapists.find(
+      (therapist) => therapist._id === therapistId
+    );
+    const schedules = _.map(therapist.reservations, "date");
+    setTherapistSched(schedules);
+  };
   // watch value of province field and dynamically get city based on that
   const cities = getCities(watch("state"));
 
   useEffect(() => {
     dispatch(loadUsers());
-  }, [dispatch, therapists]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (isSubmitSuccessful) reset(defaultValues);
-  }, [isSubmitSuccessful, reset, defaultValues]);
+  }, [isSubmitSuccessful, reset, defaultValues, therapists]);
 
   const concat = (item) => {
     return `${item.firstName} ${item.lastName}`;
   };
 
   const onSubmit = (data) => {
-    console.log("data: ", data);
+    // console.log("data: ", data);
     const appointment = _.pick(data, [
       "address",
       "addressTwo",
@@ -199,7 +206,15 @@ const BookAppointmentForm = () => {
                 <Form.Row>
                   <Form.Group as={Col} controlId="therapist">
                     <Form.Label>Therapists</Form.Label>
-                    <Form.Control as="select" name="therapist" ref={register}>
+                    <Form.Control
+                      as="select"
+                      name="therapist"
+                      ref={register}
+                      onChange={getTherapistsSchedules}
+                    >
+                      <option value="" disabled>
+                        Select your therapist
+                      </option>
                       {therapists.map((therapist) => (
                         <option value={therapist._id} key={therapist._id}>
                           {concat(therapist)}
@@ -218,6 +233,8 @@ const BookAppointmentForm = () => {
                       name="date"
                       render={(props) => (
                         <ReactDatePicker
+                          disabled={!therapistId ? true : false}
+                          schedules={therapistSched}
                           value={props.value}
                           onChange={props.onChange}
                         />
