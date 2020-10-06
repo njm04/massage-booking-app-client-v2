@@ -31,6 +31,6 @@ export const getTherapists = createSelector(
   (state) => state.entities.users,
   (users) =>
     users.list.filter(
-      (user) => user.userType.name === "therapist" && user.isAvailable
+      (user) => user.userType.name === "therapist" //&& user.isAvailable
     )
 );
