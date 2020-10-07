@@ -3,22 +3,27 @@ import { Navbar, Nav } from "react-bootstrap";
 import Logout from "../common/logout";
 import { getUser } from "../../store/auth";
 import { useSelector } from "react-redux";
-import { Link } from "@reach/router";
+import NavLink from "./navLink";
 
 const NavBar = () => {
   const user = useSelector(getUser);
-  const { firstName, lastName } = user;
+  const { firstName, lastName, userType = {} } = user;
 
   return (
     <Navbar bg="dark" variant="dark">
       <Navbar.Brand href="#home">Navbar</Navbar.Brand>
       <Nav className="mr-auto">
-        <Link className="nav-link" to="/dashboard">
+        <NavLink to="/appointments" className="nav-link">
           Appointments
-        </Link>
-        <Link className="nav-link" to="/book-appointment">
+        </NavLink>
+        <NavLink className="nav-link" to="/book-appointment">
           Book Appointment
-        </Link>
+        </NavLink>
+        {user && userType.name === "admin" ? (
+          <NavLink className="nav-link" to="/calendar">
+            Calendar
+          </NavLink>
+        ) : null}
       </Nav>
       {/* <Form inline>
       <FormControl type="text" placeholder="Search" className="mr-sm-2" />
