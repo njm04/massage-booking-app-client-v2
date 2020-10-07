@@ -1,6 +1,5 @@
 import React from "react";
 import { Redirect } from "@reach/router";
-import Login from "../login";
 import auth from "../../services/authService";
 
 const PrivateRoute = (props) => {
@@ -8,7 +7,7 @@ const PrivateRoute = (props) => {
   return auth.getCurrentUser() ? (
     <Comp {...rest} />
   ) : (
-    <Redirect to="/" noThrow />
+    <Redirect to="/login" noThrow />
   );
 };
 
