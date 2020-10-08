@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { apiCallBegan } from "./api";
+import moment from "moment";
+import memoize from "lodash.memoize";
 
 const slice = createSlice({
   name: "appointments",
@@ -55,7 +57,37 @@ export const addAppointment = (appointment) => {
   });
 };
 
+export const getAppointmentById = createSelector(
+  (state) => state.entities.appointments,
+  (appointments) =>
+    memoize((id) =>
+      appointments.list.find((appointment) => appointment._id === id)
+    )
+);
+
 export const getAppointments = createSelector(
   (state) => state.entities.appointments,
-  (appointments) => appointments.list
+  (appointments) =>
+    appointments.list.map((appointment) => {
+      return {
+        id: appointment._id,
+        name: concatName(appointment.user),
+        firstName: appointment.user.firstName,
+        lastName: appointment.user.lastName,
+        massageType: appointment.massageType,
+        duration: appointment.duration + " minutes",
+        contactNumber: appointment.contactNumber,
+        address: concatAddress(appointment),
+        therapistId: appointment.therapist._id,
+        therapistName: concatName(appointment.therapist),
+        date: moment(appointment.date).format("MMMM D YYYY, h:mm A"),
+      };
+    })
 );
+
+const concatAddress = (obj) => {
+  const addressTwo = obj.addressTwo ? obj.addressTwo + " " : "";
+  return `${addressTwo}${obj.address}, ${obj.city}, ${obj.state}, ${obj.zip}`;
+};
+
+const concatName = (obj) => `${obj.firstName} ${obj.lastName}`;
