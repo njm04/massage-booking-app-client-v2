@@ -6,7 +6,7 @@ const TableBody = (props) => {
 
   // gets the value from object based on path/key
   const renderCell = (item, column) => {
-    if (column.content) return column.content();
+    if (column.content) return column.content(item.id);
     return _.get(item, column.path);
   };
 
