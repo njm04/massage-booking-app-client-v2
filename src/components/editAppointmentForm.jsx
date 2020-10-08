@@ -42,7 +42,7 @@ let EditAppointmentForm = ({ appointmentId }, ref) => {
     firstName: appointment.user.firstName,
     lastName: appointment.user.lastName,
     address: appointment.address,
-    addressTwo: appointment.Two,
+    addressTwo: appointment.addressTwo,
     state: appointment.state,
     city: appointment.city,
     zip: appointment.zip,
