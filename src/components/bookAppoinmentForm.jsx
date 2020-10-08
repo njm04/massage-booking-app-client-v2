@@ -12,7 +12,7 @@ import { getTherapists, loadUsers } from "../store/users";
 import { addAppointment } from "../store/appointments";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
-import { bookAppoinmentFormSchema } from "../validation/validationSchemas";
+import { appoinmentFormSchema } from "../validation/validationSchemas";
 
 const getCities = (abbreviation) => {
   const provAbbreviation = !abbreviation ? "AB" : abbreviation;
@@ -62,7 +62,7 @@ const BookAppointmentForm = () => {
     reset,
     formState: { isSubmitSuccessful },
   } = useForm({
-    resolver: yupResolver(bookAppoinmentFormSchema),
+    resolver: yupResolver(appoinmentFormSchema),
     defaultValues,
   });
 
