@@ -17,13 +17,13 @@ const Login = () => {
       await auth.login(email, password);
       http.setJwt(auth.getJwt());
       dispatch(authReceived(auth.getCurrentUser()));
-      navigate("/appointments");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
   };
 
-  if (auth.getCurrentUser()) return <Redirect to="/appointments" noThrow />;
+  if (auth.getCurrentUser()) return <Redirect to="/" noThrow />;
   return (
     <div>
       <Form className="mt-3" onSubmit={handleSubmit}>

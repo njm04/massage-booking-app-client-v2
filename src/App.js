@@ -30,7 +30,7 @@ function App() {
         <Router>
           <Login path="/login" />
           <PrivateRoute as={Dashboard} path="/">
-            <PrivateRoute as={AppointmentsTable} path="/appointments" />
+            <PrivateRoute as={AppointmentsTable} path="/" />
             <PrivateRoute as={BookAppointmentForm} path="/book-appointment" />
             <PrivateRoute as={SchedulesCalendar} path="/calendar" />
           </PrivateRoute>

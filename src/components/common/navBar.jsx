@@ -13,7 +13,7 @@ const NavBar = () => {
     <Navbar bg="dark" variant="dark">
       <Navbar.Brand href="#home">Navbar</Navbar.Brand>
       <Nav className="mr-auto">
-        <NavLink to="/appointments" className="nav-link">
+        <NavLink to="/" className="nav-link">
           Appointments
         </NavLink>
         <NavLink className="nav-link" to="/book-appointment">
