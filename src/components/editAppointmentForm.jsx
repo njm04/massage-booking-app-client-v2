@@ -8,10 +8,10 @@ import _ from "lodash";
 // TODO: get states/provinces data from backend instead of json file
 import states from "../canadian-states.json";
 import { getTherapists, loadUsers } from "../store/users";
-import { getAppointmentById } from "../store/appointments";
+import { getAppointmentById, editAppointment } from "../store/appointments";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
-import { appoinmentFormSchema } from "../validation/validationSchemas";
+import { appointmentFormSchema } from "../validation/validationSchemas";
 import { forwardRef } from "react";
 
 const getCities = (abbreviation) => {
@@ -33,8 +33,10 @@ const massageTypes = [
   "Back massage",
 ];
 
-let EditAppointmentForm = ({ appointmentId }, ref) => {
-  const therapists = useSelector(getTherapists);
+let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
+  // data from useSelector(getTherapists) is empty on the first render
+  // for now im initializing the therapists data from the appointments table
+  // const therapists = useSelector(getTherapists);
   const appointment = useSelector(getAppointmentById)(appointmentId);
   const dispatch = useDispatch();
   const [therapistSched, setTherapistSched] = useState([]);
@@ -61,7 +63,7 @@ let EditAppointmentForm = ({ appointmentId }, ref) => {
     reset,
     formState: { isSubmitSuccessful },
   } = useForm({
-    resolver: yupResolver(appoinmentFormSchema),
+    resolver: yupResolver(appointmentFormSchema),
     defaultValues,
   });
 
@@ -92,7 +94,7 @@ let EditAppointmentForm = ({ appointmentId }, ref) => {
   const onSubmit = (data) => {
     console.log("data: ", data);
 
-    const appointment = _.pick(data, [
+    const payload = _.pick(data, [
       "address",
       "addressTwo",
       "city",
@@ -104,6 +106,12 @@ let EditAppointmentForm = ({ appointmentId }, ref) => {
       "therapist",
       "zip",
     ]);
+
+    if (appointment.therapist._id !== payload.therapist)
+      payload.prevTherapist = appointment.therapist._id;
+
+    console.log(payload);
+    dispatch(editAppointment(appointment._id, payload));
   };
 
   /*

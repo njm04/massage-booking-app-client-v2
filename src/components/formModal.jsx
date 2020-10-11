@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Button, Modal } from "react-bootstrap";
 import EditAppointmentForm from "./editAppointmentForm";
 
-const FormModal = ({ show, setShow, appointmentId }) => {
+const FormModal = ({ show, setShow, appointmentId, therapists }) => {
   const formRef = useRef();
 
   const handleClose = () => setShow(false);
@@ -19,13 +19,17 @@ const FormModal = ({ show, setShow, appointmentId }) => {
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
-        size="lg"
+        size="xl"
       >
         <Modal.Header closeButton>
           <Modal.Title>Modal title</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <EditAppointmentForm ref={formRef} appointmentId={appointmentId} />
+          <EditAppointmentForm
+            ref={formRef}
+            appointmentId={appointmentId}
+            therapists={therapists}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
