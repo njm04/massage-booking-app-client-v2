@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { Table } from "react-bootstrap";
-import { loadAppointments, getAppointments } from "../store/appointments";
+import {
+  loadAppointments,
+  getAppointments,
+  deleteAppointment,
+} from "../store/appointments";
+import { getTherapists, loadUsers } from "../store/users";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import { Button } from "react-bootstrap";
 // import TableHeader from "./common/tableHeader";
@@ -11,6 +16,7 @@ import FormModal from "./formModal";
 
 const AppointmentsTable = () => {
   const dispatch = useDispatch();
+  const therapists = useSelector(getTherapists);
   const appointments = useSelector(getAppointments);
   const [appointmentId, setAppointmentId] = useState("");
   const [show, setShow] = useState(false);
@@ -19,6 +25,10 @@ const AppointmentsTable = () => {
   const handleShow = (id) => {
     setShow(true);
     setAppointmentId(id);
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deleteAppointment(id));
   };
 
   const columns = [
@@ -39,8 +49,8 @@ const AppointmentsTable = () => {
     },
     {
       key: "delete",
-      content: () => (
-        <Button variant="outline-danger">
+      content: (id) => (
+        <Button variant="outline-danger" onClick={() => handleDelete(id)}>
           <FaTrashAlt />
         </Button>
       ),
@@ -49,6 +59,7 @@ const AppointmentsTable = () => {
 
   useEffect(() => {
     dispatch(loadAppointments());
+    dispatch(loadUsers());
     console.log("i fire once");
   }, [dispatch]);
 
@@ -59,7 +70,12 @@ const AppointmentsTable = () => {
         <TableHeader columns={columns} />
         <TableBody columns={columns} data={appointments} />
       </Table> */}
-      <FormModal show={show} setShow={setShow} appointmentId={appointmentId} />
+      <FormModal
+        show={show}
+        setShow={setShow}
+        appointmentId={appointmentId}
+        therapists={therapists}
+      />
     </>
   );
 };
