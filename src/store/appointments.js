@@ -18,6 +18,19 @@ const slice = createSlice({
       appointments.list.push(action.payload);
       appointments.loading = false;
     },
+    appointmentEdited: (appointments, action) => {
+      const { _id: appointmentId } = action.payload;
+      console.log(appointmentId);
+      const index = appointments.list.findIndex(
+        (appointment) => appointment._id === appointmentId
+      );
+      appointments.list[index] = action.payload;
+      console.log(index);
+    },
+    appointmentDeleted: (appointments, action) => {
+      console.log(action.payload);
+      appointments.list.filter((appointment) => !appointment.isDeleted);
+    },
     appointmentAddRequested: (appointments, action) => {
       appointments.loading = true;
     },
@@ -30,6 +43,8 @@ const slice = createSlice({
 const {
   appointmentsReceived,
   appointmentAdded,
+  appointmentEdited,
+  appointmentDeleted,
   appointmentAddRequested,
   appointmentAddFailed,
 } = slice.actions;
@@ -53,6 +68,28 @@ export const addAppointment = (appointment) => {
     data: appointment,
     onStart: appointmentAddRequested.type,
     onSuccess: appointmentAdded.type,
+    onError: appointmentAddFailed.type,
+  });
+};
+
+export const editAppointment = (appointmentId, appointment) => {
+  appointment.date = appointment.date.getTime();
+  return apiCallBegan({
+    url: `${url}/${appointmentId}`,
+    method: "PUT",
+    data: appointment,
+    onStart: appointmentAddRequested.type,
+    onSuccess: appointmentEdited.type,
+    onError: appointmentAddFailed.type,
+  });
+};
+
+export const deleteAppointment = (appointmentId) => {
+  return apiCallBegan({
+    url: `${url}/delete/${appointmentId}`,
+    method: "PUT",
+    onStart: appointmentAddRequested.type,
+    onSuccess: appointmentDeleted.type,
     onError: appointmentAddFailed.type,
   });
 };
