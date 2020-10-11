@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const appoinmentFormSchema = yup.object().shape({
+export const appointmentFormSchema = yup.object().shape({
   firstName: yup.string().required("Firstname is a required field"),
   lastName: yup.string().required("Firstname is a required field"),
   massageType: yup.string().required("Massage type is a required field"),
@@ -20,4 +20,5 @@ export const appoinmentFormSchema = yup.object().shape({
   city: yup.string().min(3).max(255).required("City is a required field"),
   zip: yup.string().min(6).max(255).required("Zip is a required field"),
   date: yup.date().required("Date and time is a required field"),
+  therapist: yup.string().required("Therapist is a required field"),
 });
