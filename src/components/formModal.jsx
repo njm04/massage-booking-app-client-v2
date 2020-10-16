@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
 import { Button, Modal } from "react-bootstrap";
 import EditAppointmentForm from "./editAppointmentForm";
+import Spinner from "./common/spinner";
 
-const FormModal = ({ show, setShow, appointmentId, therapists }) => {
+const FormModal = ({ show, setShow, appointmentId, therapists, loading }) => {
   const formRef = useRef();
-
   const handleClose = () => setShow(false);
 
   const handleSubmit = (e) => {
@@ -32,11 +32,17 @@ const FormModal = ({ show, setShow, appointmentId, therapists }) => {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleClose} disabled={loading}>
             Close
           </Button>
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
-            Submit
+          <Button
+            variant="primary"
+            type="submit"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? <Spinner /> : null}
+            <span>Submit</span>
           </Button>
         </Modal.Footer>
       </Modal>
