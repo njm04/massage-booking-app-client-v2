@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { apiCallBegan } from "./api";
+import _ from "lodash";
 
 const slice = createSlice({
   name: "users",
@@ -33,4 +34,16 @@ export const getTherapists = createSelector(
     users.list.filter(
       (user) => user.userType.name === "therapist" //&& user.isAvailable
     )
+);
+
+export const getTherapistSchedules = createSelector(
+  (state) => state.entities.users,
+  (users) =>
+    _.memoize((id) => {
+      const therapist = users.list.find((user) => user._id === id);
+      return therapist.reservations.map((schedule) => ({
+        date: schedule.date,
+        duration: schedule.duration,
+      }));
+    })
 );
