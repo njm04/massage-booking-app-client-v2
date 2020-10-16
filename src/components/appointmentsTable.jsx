@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { Table } from "react-bootstrap";
 import {
   loadAppointments,
   getAppointments,
   deleteAppointment,
+  isLoading,
 } from "../store/appointments";
 import { getTherapists, loadUsers } from "../store/users";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import { Button } from "react-bootstrap";
-// import TableHeader from "./common/tableHeader";
-// import TableBody from "./common/tableBody";
+import { Button, Spinner } from "react-bootstrap";
 import Table from "./common/table";
 import FormModal from "./formModal";
 
@@ -18,8 +16,10 @@ const AppointmentsTable = () => {
   const dispatch = useDispatch();
   const therapists = useSelector(getTherapists);
   const appointments = useSelector(getAppointments);
+  const loading = useSelector(isLoading);
   const [appointmentId, setAppointmentId] = useState("");
   const [show, setShow] = useState(false);
+  const [appointmentDeleteId, setAppointmentDeleteId] = useState("");
 
   // data came from tableBody and passed to content() then to handleShow
   const handleShow = (id) => {
@@ -29,6 +29,7 @@ const AppointmentsTable = () => {
 
   const handleDelete = (id) => {
     dispatch(deleteAppointment(id));
+    setAppointmentDeleteId(id);
   };
 
   const columns = [
@@ -61,20 +62,25 @@ const AppointmentsTable = () => {
     dispatch(loadAppointments());
     dispatch(loadUsers());
     console.log("i fire once");
-  }, [dispatch]);
+  }, [dispatch, appointmentDeleteId]);
 
   return (
     <>
-      <Table columns={columns} data={appointments} />
-      {/* <Table striped bordered hover>
-        <TableHeader columns={columns} />
-        <TableBody columns={columns} data={appointments} />
-      </Table> */}
+      {loading ? (
+        <div>
+          <Table columns={columns} />
+          <Spinner animation="border" variant="primary" className="mt-5" />
+          <h2>Loading...</h2>
+        </div>
+      ) : (
+        <Table columns={columns} data={appointments} />
+      )}
       <FormModal
         show={show}
         setShow={setShow}
         appointmentId={appointmentId}
         therapists={therapists}
+        loading={loading}
       />
     </>
   );
