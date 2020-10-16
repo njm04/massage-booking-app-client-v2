@@ -3,6 +3,7 @@ import { createSelector } from "reselect";
 import { apiCallBegan } from "./api";
 import moment from "moment";
 import memoize from "lodash.memoize";
+import { concatName, concatAddress } from "../utils/utils";
 
 const slice = createSlice({
   name: "appointments",
@@ -11,8 +12,15 @@ const slice = createSlice({
     loading: false,
   },
   reducers: {
+    appointmentsRequested: (appointments, action) => {
+      appointments.loading = true;
+    },
+    appointmentsRequestFailed: (appointments, action) => {
+      appointments.loading = false;
+    },
     appointmentsReceived: (appointments, action) => {
       appointments.list = action.payload;
+      appointments.loading = false;
     },
     appointmentAdded: (appointments, action) => {
       appointments.list.push(action.payload);
@@ -20,12 +28,11 @@ const slice = createSlice({
     },
     appointmentEdited: (appointments, action) => {
       const { _id: appointmentId } = action.payload;
-      console.log(appointmentId);
       const index = appointments.list.findIndex(
         (appointment) => appointment._id === appointmentId
       );
       appointments.list[index] = action.payload;
-      console.log(index);
+      appointments.loading = false;
     },
     appointmentDeleted: (appointments, action) => {
       console.log(action.payload);
@@ -37,16 +44,26 @@ const slice = createSlice({
     appointmentAddFailed: (appointments, action) => {
       appointments.loading = false;
     },
+    appointmentEditRequested: (appointments, action) => {
+      appointments.loading = true;
+    },
+    appointmentEditFailed: (appointments, action) => {
+      appointments.loading = false;
+    },
   },
 });
 
 const {
+  appointmentsRequested,
+  appointmentsRequestFailed,
   appointmentsReceived,
   appointmentAdded,
   appointmentEdited,
   appointmentDeleted,
   appointmentAddRequested,
   appointmentAddFailed,
+  appointmentEditRequested,
+  appointmentEditFailed,
 } = slice.actions;
 export default slice.reducer;
 const url = "/bookings";
@@ -55,7 +72,9 @@ export const loadAppointments = () => (dispatch, getState) => {
     apiCallBegan({
       url,
       method: "GET",
+      onStart: appointmentsRequested.type,
       onSuccess: appointmentsReceived.type,
+      onError: appointmentsRequestFailed.type,
     })
   );
 };
@@ -78,9 +97,9 @@ export const editAppointment = (appointmentId, appointment) => {
     url: `${url}/${appointmentId}`,
     method: "PUT",
     data: appointment,
-    onStart: appointmentAddRequested.type,
+    onStart: appointmentEditRequested.type,
     onSuccess: appointmentEdited.type,
-    onError: appointmentAddFailed.type,
+    onError: appointmentEditFailed.type,
   });
 };
 
@@ -122,9 +141,7 @@ export const getAppointments = createSelector(
     })
 );
 
-const concatAddress = (obj) => {
-  const addressTwo = obj.addressTwo ? obj.addressTwo + " " : "";
-  return `${addressTwo}${obj.address}, ${obj.city}, ${obj.state}, ${obj.zip}`;
-};
-
-const concatName = (obj) => `${obj.firstName} ${obj.lastName}`;
+export const isLoading = createSelector(
+  (state) => state.entities.appointments,
+  (appointments) => appointments.loading
+);
