@@ -9,15 +9,25 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
   const times = schedules.map((schedule) => {
     let minutes = 0;
     let hours = 0;
-    const date = new Date(schedule);
+    const date = new Date(schedule.date);
     const currentDate = new Date();
     if (new Date(chosenDate).getDate() === date.getDate()) {
+      minutes = date.getMinutes();
+      hours = date.getHours();
+      return setHours(setMinutes(date, minutes), hours);
+    }
+    if (new Date(chosenDate).getDate() !== date.getDate()) {
+      return null;
+    }
+
+    if (!chosenDate && currentDate.getDate() === date.getDate()) {
       minutes = date.getMinutes();
       hours = date.getHours();
 
       return setHours(setMinutes(date, minutes), hours);
     }
-    if (!chosenDate && currentDate.getDate() === date.getDate()) {
+
+    if (!chosenDate) {
       minutes = date.getMinutes();
       hours = date.getHours();
 
