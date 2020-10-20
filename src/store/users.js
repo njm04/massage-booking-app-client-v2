@@ -7,25 +7,54 @@ const slice = createSlice({
   name: "users",
   initialState: {
     list: [],
+    loading: false,
   },
   reducers: {
-    usersReceived: (appointments, action) => {
-      appointments.list = action.payload;
+    usersReceived: (users, action) => {
+      users.list = action.payload;
+    },
+    createAccountRequested: (users, action) => {
+      users.loading = true;
+    },
+    createAccountFailed: (users, action) => {
+      users.loading = false;
+    },
+    accountCreated: (users, action) => {
+      users.list.push(action.payload);
+      users.loading = false;
     },
   },
 });
 
-const { usersReceived } = slice.actions;
+const {
+  usersReceived,
+  createAccountRequested,
+  createAccountFailed,
+  accountCreated,
+} = slice.actions;
+const url = "/users";
 export default slice.reducer;
 
 export const loadUsers = () => (dispatch, getState) => {
   return dispatch(
     apiCallBegan({
-      url: "/users",
+      url,
       method: "GET",
       onSuccess: usersReceived.type,
     })
   );
+};
+
+export const registerUser = (account) => {
+  account.birthDate = account.birthDate.getTime();
+  return apiCallBegan({
+    url,
+    method: "POST",
+    data: account,
+    onStart: createAccountRequested.type,
+    onSuccess: accountCreated.type,
+    onError: createAccountFailed.type,
+  });
 };
 
 export const getTherapists = createSelector(
@@ -46,4 +75,9 @@ export const getTherapistSchedules = createSelector(
         duration: schedule.duration,
       }));
     })
+);
+
+export const isLoading = createSelector(
+  (state) => state.entities.users,
+  (users) => users.loading
 );

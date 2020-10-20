@@ -27,6 +27,11 @@ const Login = () => {
     }
   };
 
+  const onClick = () => {
+    console.log("clicked");
+    navigate("/registration");
+  };
+
   if (auth.getCurrentUser()) return <Redirect to="/" noThrow />;
   return (
     <div>
@@ -66,6 +71,14 @@ const Login = () => {
                   </Form.Group> */}
                   <Button variant="primary" type="submit" block>
                     login
+                  </Button>
+                  <Button
+                    variant="success"
+                    type="button"
+                    onClick={onClick}
+                    block
+                  >
+                    Create Account
                   </Button>
                 </Card.Body>
               </Card>
