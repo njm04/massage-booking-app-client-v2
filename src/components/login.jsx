@@ -1,20 +1,24 @@
-import React, { useState } from "react";
-import { Form, Button, Card } from "react-bootstrap";
-import auth from "../services/authService";
+import React from "react";
+import { Form, Button, Card, Alert } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers";
 import { navigate, Redirect } from "@reach/router";
-import { authReceived } from "../store/auth";
 import { useDispatch } from "react-redux";
+import auth from "../services/authService";
 import http from "../services/httpService";
+import Input from "./common/input";
+import { authReceived } from "../store/auth";
+import { loginFormSchema } from "../validation/loginValidationSchema";
 
 const Login = () => {
-  const [email, setEmail] = useState([]);
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit, errors } = useForm({
+    resolver: yupResolver(loginFormSchema),
+  });
   const dispatch = useDispatch();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     try {
-      await auth.login(email, password);
+      await auth.login(data.email, data.password);
       http.setJwt(auth.getJwt());
       dispatch(authReceived(auth.getCurrentUser()));
       navigate("/");
@@ -26,7 +30,7 @@ const Login = () => {
   if (auth.getCurrentUser()) return <Redirect to="/" noThrow />;
   return (
     <div>
-      <Form className="mt-3" onSubmit={handleSubmit}>
+      <Form className="mt-3" onSubmit={handleSubmit(onSubmit)}>
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-6">
@@ -34,23 +38,28 @@ const Login = () => {
                 <Card.Header as="h2">Login</Card.Header>
                 <Card.Body>
                   <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
+                    <Input
+                      name="email"
+                      label="Email"
                       placeholder="Enter email"
-                      onChange={(e) => setEmail(e.target.value)}
-                      value={email}
+                      register={register}
                     />
+                    {errors.email && (
+                      <Alert variant="danger">{errors.email.message}</Alert>
+                    )}
                   </Form.Group>
 
                   <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
+                    <Input
+                      name="password"
+                      label="Password"
                       placeholder="Password"
-                      onChange={(e) => setPassword(e.target.value)}
-                      value={password}
+                      register={register}
+                      type="password"
                     />
+                    {errors.password && (
+                      <Alert variant="danger">{errors.password.message}</Alert>
+                    )}
                   </Form.Group>
                   {/* <Form.Group controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Check me out" />
