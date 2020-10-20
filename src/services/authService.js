@@ -12,6 +12,10 @@ export const login = async (email, password) => {
   localStorage.setItem(tokenKey, jwt);
 };
 
+export const loginWithJwt = (jwt) => {
+  localStorage.setItem(tokenKey, jwt);
+};
+
 export const logout = () => {
   localStorage.removeItem(tokenKey);
   http.setJwt(false);
@@ -37,6 +41,7 @@ export function getJwt() {
 
 export default {
   login,
+  loginWithJwt,
   logout,
   getCurrentUser,
   getJwt,
