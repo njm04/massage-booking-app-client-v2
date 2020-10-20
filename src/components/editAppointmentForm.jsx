@@ -18,7 +18,7 @@ import {
   editAppointment,
   isLoading,
 } from "../store/appointments";
-import { appointmentFormSchema } from "../validation/validationSchemas";
+import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
 import { concatName } from "../utils/utils";

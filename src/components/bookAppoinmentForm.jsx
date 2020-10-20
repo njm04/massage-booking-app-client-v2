@@ -13,7 +13,7 @@ import { addAppointment, isLoading } from "../store/appointments";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
 import Spinner from "./common/spinner";
-import { appointmentFormSchema } from "../validation/validationSchemas";
+import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
 import { concatName } from "../utils/utils";
 
 const getCities = (abbreviation) => {
