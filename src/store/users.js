@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { apiCallBegan } from "./api";
 import _ from "lodash";
+import moment from "moment";
+import { concatName } from "../utils/utils";
 
 const slice = createSlice({
   name: "users",
@@ -10,8 +12,15 @@ const slice = createSlice({
     loading: false,
   },
   reducers: {
+    usersRequested: (users, action) => {
+      users.loading = true;
+    },
+    usersRequestFailed: (users, action) => {
+      users.loading = false;
+    },
     usersReceived: (users, action) => {
       users.list = action.payload;
+      users.loading = false;
     },
     createAccountRequested: (users, action) => {
       users.loading = true;
@@ -27,6 +36,8 @@ const slice = createSlice({
 });
 
 const {
+  usersRequested,
+  usersRequestFailed,
   usersReceived,
   createAccountRequested,
   createAccountFailed,
@@ -40,7 +51,9 @@ export const loadUsers = () => (dispatch, getState) => {
     apiCallBegan({
       url,
       method: "GET",
+      onStart: usersRequested.type,
       onSuccess: usersReceived.type,
+      onError: usersRequestFailed.type,
     })
   );
 };
@@ -68,6 +81,21 @@ export const createAccount = (account) => {
     onError: createAccountFailed.type,
   });
 };
+
+export const getAllUsers = createSelector(
+  (state) => state.entities.users,
+  (users) =>
+    users.list.map((user) => {
+      return {
+        id: user._id,
+        name: concatName(user),
+        email: user.email,
+        userType: user.userType.name,
+        birthDate: moment(user.date).format("MMMM D YYYY"),
+        gender: user.gender,
+      };
+    })
+);
 
 export const getTherapists = createSelector(
   (state) => state.entities.users,
