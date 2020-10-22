@@ -57,6 +57,18 @@ export const registerUser = (account) => {
   });
 };
 
+export const createAccount = (account) => {
+  account.birthDate = account.birthDate.getTime();
+  return apiCallBegan({
+    url: `${url}/create-user`,
+    method: "POST",
+    data: account,
+    onStart: createAccountRequested.type,
+    onSuccess: accountCreated.type,
+    onError: createAccountFailed.type,
+  });
+};
+
 export const getTherapists = createSelector(
   (state) => state.entities.users,
   (users) =>

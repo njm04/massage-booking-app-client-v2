@@ -20,9 +20,14 @@ const NavBar = () => {
           Book Appointment
         </NavLink>
         {user && userType.name === "admin" ? (
-          <NavLink className="nav-link" to="/calendar">
-            Calendar
-          </NavLink>
+          <>
+            <NavLink className="nav-link" to="/calendar">
+              Calendar
+            </NavLink>
+            <NavLink className="nav-link" to="/create-user">
+              Create User
+            </NavLink>
+          </>
         ) : null}
       </Nav>
       {/* <Form inline>
