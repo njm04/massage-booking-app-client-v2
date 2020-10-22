@@ -58,7 +58,6 @@ const Registration = () => {
   };
 
   useEffect(() => {
-    console.log("registration");
     if (isSubmitSuccessful) reset(defaultValues);
   }, [isSubmitSuccessful, reset, defaultValues]);
 
@@ -155,7 +154,15 @@ const Registration = () => {
                       )}
                     </Form.Group>
                   </Form.Row>
-
+                  <Button
+                    variant="dark"
+                    type="submit"
+                    className="mr-2"
+                    onClick={() => navigate("/login")}
+                  >
+                    {loading ? <Spinner /> : null}
+                    <span>Back</span>
+                  </Button>
                   <Button variant="primary" type="submit">
                     {loading ? <Spinner /> : null}
                     <span>Submit</span>
