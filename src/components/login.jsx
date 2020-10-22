@@ -28,7 +28,6 @@ const Login = () => {
   };
 
   const onClick = () => {
-    console.log("clicked");
     navigate("/registration");
   };
 
