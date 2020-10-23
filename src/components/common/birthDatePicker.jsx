@@ -16,6 +16,7 @@ const BirthDatePicker = ({ value, onChange }) => {
       showYearDropdown
       yearDropdownItemNumber={2}
       dropdownMode="select"
+      dateFormat="MMMM d, yyyy"
     />
   );
 };
