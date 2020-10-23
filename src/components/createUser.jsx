@@ -25,6 +25,7 @@ const CreateUser = () => {
     firstName: "",
     lastName: "",
     userType: "",
+    status: "active",
   };
   const {
     register,
@@ -38,18 +39,9 @@ const CreateUser = () => {
     resolver: yupResolver(createUsersValidationSchema),
   });
 
-  const onSubmit = (data) => {
-    if (!data.userType) data.userType = null;
+  const onSubmit = (account) => {
+    if (!account.userType) account.userType = null;
 
-    const account = _.pick(data, [
-      "email",
-      "password",
-      "firstName",
-      "lastName",
-      "birthDate",
-      "gender",
-      "userType",
-    ]);
     try {
       dispatch(createAccount(account));
       const type = userTypes.find(
@@ -128,31 +120,6 @@ const CreateUser = () => {
                   </Form.Row>
 
                   <Form.Row>
-                    <Form.Group as={Col} controlId="formGridEmail">
-                      <Input
-                        name="email"
-                        label="Email"
-                        placeholder="Enter email"
-                        register={register}
-                      />
-                      {errors.email && <Error message={errors.email.message} />}
-                    </Form.Group>
-
-                    <Form.Group as={Col} controlId="formGridPassword">
-                      <Input
-                        name="password"
-                        label="Password"
-                        placeholder="password"
-                        type="password"
-                        register={register}
-                      />
-                      {errors.password && (
-                        <Error message={errors.password.message} />
-                      )}
-                    </Form.Group>
-                  </Form.Row>
-
-                  <Form.Row>
                     <Form.Group as={Col} controlId="birtDate">
                       <Form.Label>Birthday</Form.Label>
                       <Controller
@@ -182,6 +149,42 @@ const CreateUser = () => {
                       </Form.Control>
                       {errors.gender && (
                         <Error message={errors.gender.message} />
+                      )}
+                    </Form.Group>
+
+                    <Form.Group as={Col} controlId="status">
+                      <Form.Label>Status</Form.Label>
+                      <Form.Control as="select" name="status" ref={register}>
+                        <option value="active">Active</option>
+                        <option value="suspend">Suspend</option>
+                      </Form.Control>
+                      {errors.gender && (
+                        <Error message={errors.gender.message} />
+                      )}
+                    </Form.Group>
+                  </Form.Row>
+
+                  <Form.Row>
+                    <Form.Group as={Col} controlId="formGridEmail">
+                      <Input
+                        name="email"
+                        label="Email"
+                        placeholder="Enter email"
+                        register={register}
+                      />
+                      {errors.email && <Error message={errors.email.message} />}
+                    </Form.Group>
+
+                    <Form.Group as={Col} controlId="formGridPassword">
+                      <Input
+                        name="password"
+                        label="Password"
+                        placeholder="password"
+                        type="password"
+                        register={register}
+                      />
+                      {errors.password && (
+                        <Error message={errors.password.message} />
                       )}
                     </Form.Group>
                   </Form.Row>
