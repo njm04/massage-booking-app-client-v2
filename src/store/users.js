@@ -32,6 +32,18 @@ const slice = createSlice({
       users.list.push(action.payload);
       users.loading = false;
     },
+    editAccountRequested: (users, action) => {
+      users.loading = true;
+    },
+    editAccountFailed: (users, action) => {
+      users.loading = false;
+    },
+    accountEdited: (users, action) => {
+      const { _id: userId } = action.payload;
+      const index = users.list.findIndex((user) => user._id === userId);
+      users.list[index] = action.payload;
+      users.loading = false;
+    },
   },
 });
 
@@ -42,6 +54,9 @@ const {
   createAccountRequested,
   createAccountFailed,
   accountCreated,
+  editAccountRequested,
+  editAccountFailed,
+  accountEdited,
 } = slice.actions;
 const url = "/users";
 export default slice.reducer;
@@ -82,6 +97,18 @@ export const createAccount = (account) => {
   });
 };
 
+export const editAccount = (accountId, account) => {
+  account.birthDate = account.birthDate.getTime();
+  return apiCallBegan({
+    url: `${url}/${accountId}`,
+    method: "PUT",
+    data: account,
+    onStart: editAccountRequested.type,
+    onSuccess: accountEdited.type,
+    onError: editAccountFailed.type,
+  });
+};
+
 export const getAllUsers = createSelector(
   (state) => state.entities.users,
   (users) =>
@@ -91,10 +118,15 @@ export const getAllUsers = createSelector(
         name: concatName(user),
         email: user.email,
         userType: user.userType.name,
-        birthDate: moment(user.date).format("MMMM D YYYY"),
+        birthDate: moment(user.birthDate).format("MMMM D, YYYY"),
         gender: user.gender,
       };
     })
+);
+
+export const getUserById = createSelector(
+  (state) => state.entities.users,
+  (users) => _.memoize((id) => users.list.find((user) => user._id === id))
 );
 
 export const getTherapists = createSelector(
