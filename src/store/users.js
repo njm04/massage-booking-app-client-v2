@@ -44,6 +44,18 @@ const slice = createSlice({
       users.list[index] = action.payload;
       users.loading = false;
     },
+    accountDeleted: (users, action) => {
+      const userId = action.payload;
+      const index = users.list.findIndex((user) => user._id === userId);
+      users.list.splice(index, 1);
+      users.loading = false;
+    },
+    deleteAccountRequested: (users, action) => {
+      users.loading = true;
+    },
+    deleteAccountFailed: (users, action) => {
+      users.loading = false;
+    },
   },
 });
 
@@ -57,6 +69,9 @@ const {
   editAccountRequested,
   editAccountFailed,
   accountEdited,
+  accountDeleted,
+  deleteAccountRequested,
+  deleteAccountFailed,
 } = slice.actions;
 const url = "/users";
 export default slice.reducer;
@@ -106,6 +121,16 @@ export const editAccount = (accountId, account) => {
     onStart: editAccountRequested.type,
     onSuccess: accountEdited.type,
     onError: editAccountFailed.type,
+  });
+};
+
+export const deleteAccount = (accountId) => {
+  return apiCallBegan({
+    url: `${url}/${accountId}`,
+    method: "DELETE",
+    onStart: deleteAccountRequested.type,
+    onSuccess: accountDeleted.type,
+    onError: deleteAccountFailed.type,
   });
 };
 

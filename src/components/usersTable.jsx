@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers, loadUsers, getUserById, isLoading } from "../store/users";
+import { toast } from "react-toastify";
+import {
+  getAllUsers,
+  loadUsers,
+  getUserById,
+  deleteAccount,
+  isLoading,
+} from "../store/users";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import { Button, Spinner, Badge } from "react-bootstrap";
 import Table from "./common/table";
@@ -18,6 +25,12 @@ const UsersTable = () => {
     setShow(true);
     setUser(userById(id));
   };
+
+  const handleDelete = (id) => {
+    dispatch(deleteAccount(id));
+    toast.success("Account successfully deleted.");
+  };
+
   const columns = [
     { label: "Name", path: "name" },
     { label: "User type", path: "userType" },
@@ -26,6 +39,7 @@ const UsersTable = () => {
     { label: "Gender", path: "gender" },
     {
       label: "Status",
+      key: "status",
       content: (item) => {
         const variant = item.status === "active" ? "success" : "danger";
         return <Badge variant={variant}>{item.status}</Badge>;
@@ -42,7 +56,7 @@ const UsersTable = () => {
     {
       key: "delete",
       content: (item) => (
-        <Button variant="outline-danger">
+        <Button variant="outline-danger" onClick={() => handleDelete(item.id)}>
           <FaTrashAlt />
         </Button>
       ),
