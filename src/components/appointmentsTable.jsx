@@ -42,16 +42,16 @@ const AppointmentsTable = () => {
     { label: "Date", path: "date" },
     {
       key: "edit",
-      content: (id) => (
-        <Button variant="outline-info" onClick={() => handleShow(id)}>
+      content: (item) => (
+        <Button variant="outline-info" onClick={() => handleShow(item.id)}>
           <FaEdit />
         </Button>
       ),
     },
     {
       key: "delete",
-      content: (id) => (
-        <Button variant="outline-danger" onClick={() => handleDelete(id)}>
+      content: (item) => (
+        <Button variant="outline-danger" onClick={() => handleDelete(item.id)}>
           <FaTrashAlt />
         </Button>
       ),
