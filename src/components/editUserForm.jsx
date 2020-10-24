@@ -24,6 +24,7 @@ let EditUserForm = ({ user }, ref) => {
     firstName: user.firstName,
     lastName: user.lastName,
     userType: user.userType._id,
+    status: user.status,
   };
   const { register, handleSubmit, errors, control } = useForm({
     defaultValues,
@@ -90,12 +91,7 @@ let EditUserForm = ({ user }, ref) => {
 
                     <Form.Group as={Col} controlId="userType">
                       <Form.Label>User type</Form.Label>
-                      <Form.Control
-                        as="select"
-                        name="userType"
-                        defaultValue=""
-                        ref={register}
-                      >
+                      <Form.Control as="select" name="userType" ref={register}>
                         <option value="" disabled>
                           Select user type
                         </option>
@@ -123,6 +119,19 @@ let EditUserForm = ({ user }, ref) => {
                       {errors.email && <Error message={errors.email.message} />}
                     </Form.Group>
 
+                    <Form.Group as={Col} controlId="status">
+                      <Form.Label>Status</Form.Label>
+                      <Form.Control as="select" name="status" ref={register}>
+                        <option value="active">Active</option>
+                        <option value="suspend">Suspend</option>
+                      </Form.Control>
+                      {errors.gender && (
+                        <Error message={errors.gender.message} />
+                      )}
+                    </Form.Group>
+                  </Form.Row>
+
+                  <Form.Row>
                     <Form.Group as={Col} controlId="birtDate">
                       <Form.Label>Birthday</Form.Label>
                       <Controller
