@@ -120,6 +120,7 @@ export const getAllUsers = createSelector(
         userType: user.userType.name,
         birthDate: moment(user.birthDate).format("MMMM D, YYYY"),
         gender: user.gender,
+        status: user.status,
       };
     })
 );
