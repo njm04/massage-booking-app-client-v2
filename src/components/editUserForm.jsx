@@ -23,7 +23,7 @@ let EditUserForm = ({ user }, ref) => {
     email: user.email,
     firstName: user.firstName,
     lastName: user.lastName,
-    userType: user.userType._id,
+    userType: user.userType.name,
     status: user.status,
   };
   const { register, handleSubmit, errors, control } = useForm({
@@ -32,6 +32,7 @@ let EditUserForm = ({ user }, ref) => {
   });
 
   const onSubmit = (data) => {
+    delete data.userType;
     const name = concatName(data);
     try {
       dispatch(editAccount(user._id, data));
@@ -90,18 +91,12 @@ let EditUserForm = ({ user }, ref) => {
                     </Form.Group>
 
                     <Form.Group as={Col} controlId="userType">
-                      <Form.Label>User type</Form.Label>
-                      <Form.Control as="select" name="userType" ref={register}>
-                        <option value="" disabled>
-                          Select user type
-                        </option>
-                        {userTypes !== [] &&
-                          userTypes.map((userType) => (
-                            <option key={userType._id} value={userType._id}>
-                              {userType.name}
-                            </option>
-                          ))}
-                      </Form.Control>
+                      <Input
+                        name="userType"
+                        label="User type"
+                        register={register}
+                        disabled
+                      />
                       {errors.userType && (
                         <Error message={errors.userType.message} />
                       )}
