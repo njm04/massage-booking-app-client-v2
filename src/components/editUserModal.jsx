@@ -14,7 +14,13 @@ const EditUserModal = ({ show, setShow, user, loading }) => {
   };
 
   return (
-    <Modal show={show} backdrop="static" keyboard={false} size="xl">
+    <Modal
+      show={show}
+      backdrop="static"
+      onHide={handleClose}
+      keyboard={false}
+      size="xl"
+    >
       <Modal.Header closeButton>
         <Modal.Title>Edit User</Modal.Title>
       </Modal.Header>
