@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, forwardRef } from "react";
+import React, { useImperativeHandle, forwardRef } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { Form, Card, Col } from "react-bootstrap";
@@ -7,15 +7,12 @@ import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
 import { editUsersValidationSchema } from "../validation/createUsersValidationSchema";
 import { isLoading, editAccount } from "../store/users";
-import { loadUserTypes, getUserTypes } from "../store/userTypes";
-import { concatName } from "../utils/utils";
 import Input from "./common/input";
 import Error from "./common/error";
 import BirthDatePicker from "./common/birthDatePicker";
 
 let EditUserForm = ({ user }, ref) => {
   const dispatch = useDispatch();
-  const userTypes = useSelector(getUserTypes);
   const loading = useSelector(isLoading);
   const defaultValues = {
     birthDate: moment(user.birthDate).toDate(),
@@ -33,14 +30,7 @@ let EditUserForm = ({ user }, ref) => {
 
   const onSubmit = (data) => {
     delete data.userType;
-    const name = concatName(data);
-    try {
-      dispatch(editAccount(user._id, data));
-      toast.success(`${name}'s account has been updated successfully.`);
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
+    dispatch(editAccount(user._id, data));
   };
 
   /*
@@ -51,11 +41,6 @@ let EditUserForm = ({ user }, ref) => {
   useImperativeHandle(ref, () => ({
     submit: () => handleSubmit(onSubmit)(),
   }));
-
-  useEffect(() => {
-    console.log("edit user");
-    dispatch(loadUserTypes());
-  }, [dispatch]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
