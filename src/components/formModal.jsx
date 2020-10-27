@@ -22,7 +22,7 @@ const FormModal = ({ show, setShow, appointmentId, therapists, loading }) => {
         size="xl"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
+          <Modal.Title>Edit Appointment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <EditAppointmentForm
