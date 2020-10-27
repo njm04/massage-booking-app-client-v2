@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import _ from "lodash";
 import moment from "moment";
 import { apiCallBegan } from "./api";
-import { concatName } from "../utils/utils";
+import { concatName, toastMessage } from "../utils/utils";
 
 const slice = createSlice({
   name: "users",
@@ -30,12 +30,9 @@ const slice = createSlice({
       users.loading = false;
     },
     accountCreated: (users, action) => {
-      const { userType } = action.payload;
       users.list.push(action.payload);
       users.loading = false;
-      toast.success(
-        `${userType.name.toUpperCase()} account successfully created.`
-      );
+      toastMessage(action.payload);
     },
     editAccountRequested: (users, action) => {
       users.loading = true;

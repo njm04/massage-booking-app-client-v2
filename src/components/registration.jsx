@@ -50,7 +50,6 @@ const Registration = () => {
     ]);
     try {
       dispatch(registerUser(account));
-      toast.success("Account successfully created. Redirecting to login page");
       setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
       console.log(error);
