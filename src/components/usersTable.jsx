@@ -28,7 +28,6 @@ const UsersTable = () => {
 
   const handleDelete = (id) => {
     dispatch(deleteAccount(id));
-    toast.success("Account successfully deleted.");
   };
 
   const columns = [

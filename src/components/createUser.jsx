@@ -41,18 +41,9 @@ const CreateUser = () => {
 
   const onSubmit = (account) => {
     if (!account.userType) account.userType = null;
-
-    try {
-      dispatch(createAccount(account));
-      const type = userTypes.find(
-        (userType) => userType._id === account.userType
-      );
-      toast.success(`${type.name.toUpperCase()} account successfully created.`);
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
-    }
+    dispatch(createAccount(account));
   };
+
   useEffect(() => {
     dispatch(loadUserTypes());
   }, [dispatch]);

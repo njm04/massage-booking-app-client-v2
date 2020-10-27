@@ -30,8 +30,12 @@ const slice = createSlice({
       users.loading = false;
     },
     accountCreated: (users, action) => {
+      const { userType } = action.payload;
       users.list.push(action.payload);
       users.loading = false;
+      toast.success(
+        `${userType.name.toUpperCase()} account successfully created.`
+      );
     },
     editAccountRequested: (users, action) => {
       users.loading = true;
@@ -48,10 +52,12 @@ const slice = createSlice({
       toast.success(`${name}'s account has been updated successfully.`);
     },
     accountDeleted: (users, action) => {
-      const userId = action.payload;
+      const { _id: userId } = action.payload;
       const index = users.list.findIndex((user) => user._id === userId);
       users.list.splice(index, 1);
       users.loading = false;
+      const name = concatName(action.payload);
+      toast.success(`${name}'s account has been deleted successfully.`);
     },
     deleteAccountRequested: (users, action) => {
       users.loading = true;
