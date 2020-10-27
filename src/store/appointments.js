@@ -150,6 +150,7 @@ export const getAppointments = createSelector(
         therapistId: appointment.therapist._id,
         therapistName: concatName(appointment.therapist),
         date: moment(appointment.date).format("MMMM D YYYY, h:mm A"),
+        status: appointment.status,
       };
     })
 );

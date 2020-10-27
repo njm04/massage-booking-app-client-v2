@@ -8,7 +8,7 @@ import {
 } from "../store/appointments";
 import { getTherapists, loadUsers } from "../store/users";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Spinner, Badge } from "react-bootstrap";
 import Table from "./common/table";
 import FormModal from "./formModal";
 
@@ -40,6 +40,19 @@ const AppointmentsTable = () => {
     { label: "Contact number", path: "contactNumber" },
     { label: "Address", path: "address" },
     { label: "Date", path: "date" },
+    {
+      label: "Status",
+      key: "status",
+      content: (item) => {
+        const variant =
+          item.status === "pending"
+            ? "danger"
+            : item.status === "ongoing"
+            ? "warning"
+            : "success";
+        return <Badge variant={variant}>{item.status}</Badge>;
+      },
+    },
     {
       key: "edit",
       content: (item) => (
