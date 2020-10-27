@@ -26,5 +26,4 @@ export const editUsersValidationSchema = yup.object().shape({
   lastName: yup.string().required("Last name is a required field"),
   gender: yup.string().required("Gender is a required field"),
   birthDate: yup.date().required("Birthday is a required field").nullable(),
-  userType: yup.string().required("User type is a required field"),
 });
