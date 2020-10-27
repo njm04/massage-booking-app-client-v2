@@ -5,7 +5,7 @@ import { Form, Card, Col } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
-import { editUsersValidationSchema } from "../validation/createUsersValidationSchema";
+import { editUsersValidationSchema } from "../validation/usersValidationSchema";
 import { isLoading, editAccount } from "../store/users";
 import Input from "./common/input";
 import Error from "./common/error";

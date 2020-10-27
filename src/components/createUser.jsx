@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 import { toast } from "react-toastify";
 import BirthDatePicker from "./common/birthDatePicker";
-import { createUsersValidationSchema } from "../validation/createUsersValidationSchema";
+import { createUsersValidationSchema } from "../validation/usersValidationSchema";
 import { createAccount, isLoading } from "../store/users";
 import { loadUserTypes, getUserTypes } from "../store/userTypes";
 import Input from "./common/input";
