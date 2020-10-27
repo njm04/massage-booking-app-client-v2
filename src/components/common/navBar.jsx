@@ -16,9 +16,11 @@ const NavBar = () => {
         <NavLink to="/" className="nav-link">
           Appointments
         </NavLink>
-        <NavLink className="nav-link" to="/book-appointment">
-          Book Appointment
-        </NavLink>
+        {user && userType.name !== "therapist" ? (
+          <NavLink className="nav-link" to="/book-appointment">
+            Book Appointment
+          </NavLink>
+        ) : null}
         {user && userType.name === "admin" ? (
           <>
             <NavLink className="nav-link" to="/calendar">
