@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Col, Button, Card, Alert } from "react-bootstrap";
+import { Redirect } from "@reach/router";
 import _ from "lodash";
 // TODO: get states/provinces data from backend instead of json file
 import states from "../canadian-states.json";
@@ -14,6 +15,7 @@ import Input from "./common/input";
 import Spinner from "./common/spinner";
 import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
 import { concatName } from "../utils/utils";
+import auth from "../services/authService";
 
 const getCities = (abbreviation) => {
   const provAbbreviation = !abbreviation ? "AB" : abbreviation;
@@ -106,6 +108,9 @@ const BookAppointmentForm = () => {
     ]);
     dispatch(addAppointment(appointment));
   };
+
+  const userType = auth.getCurrentUser().userType.name;
+  if (userType === "therapist") return <Redirect to="/" noThrow />;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>

@@ -3,12 +3,12 @@ import { Form, Button, Card, Col } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
-import _ from "lodash";
-import { toast } from "react-toastify";
+import { Redirect } from "@reach/router";
 import BirthDatePicker from "./common/birthDatePicker";
 import { createUsersValidationSchema } from "../validation/usersValidationSchema";
 import { createAccount, isLoading } from "../store/users";
 import { loadUserTypes, getUserTypes } from "../store/userTypes";
+import auth from "../services/authService";
 import Input from "./common/input";
 import Error from "./common/error";
 import Spinner from "./common/spinner";
@@ -51,6 +51,10 @@ const CreateUser = () => {
   useEffect(() => {
     if (isSubmitSuccessful) reset(defaultValues);
   }, [isSubmitSuccessful, reset, defaultValues]);
+
+  const userType = auth.getCurrentUser().userType.name;
+  if (userType === "therapist" || userType === "customer")
+    return <Redirect to="/" noThrow />;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>

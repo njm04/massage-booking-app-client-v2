@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { Redirect } from "@reach/router";
 import {
   getAllUsers,
   loadUsers,
@@ -10,6 +10,7 @@ import {
 } from "../store/users";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import { Button, Spinner, Badge } from "react-bootstrap";
+import auth from "../services/authService";
 import Table from "./common/table";
 import EditUserModal from "./editUserModal";
 
@@ -66,6 +67,10 @@ const UsersTable = () => {
     console.log("all users");
     dispatch(loadUsers());
   }, [dispatch]);
+
+  const userType = auth.getCurrentUser().userType.name;
+  if (userType === "therapist" || userType === "customer")
+    return <Redirect to="/" noThrow />;
 
   return (
     <>

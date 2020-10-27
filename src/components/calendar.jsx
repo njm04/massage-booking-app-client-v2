@@ -3,6 +3,8 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUsers, getTherapists } from "../store/users";
+import auth from "../services/authService";
+import { Redirect } from "@reach/router";
 
 const localizer = momentLocalizer(moment);
 
@@ -33,6 +35,9 @@ const SchedulesCalendar = () => {
   useEffect(() => {
     dispatch(loadUsers());
   }, [dispatch]);
+
+  const userType = auth.getCurrentUser().userType.name;
+  if (userType === "customer") return <Redirect to="/" noThrow />;
 
   return (
     <div className="container mt-3 col-lg-12" style={{ height: "100vh" }}>
