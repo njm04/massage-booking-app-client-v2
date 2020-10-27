@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-import { apiCallBegan } from "./api";
+import { toast } from "react-toastify";
 import _ from "lodash";
 import moment from "moment";
+import { apiCallBegan } from "./api";
 import { concatName } from "../utils/utils";
 
 const slice = createSlice({
@@ -43,6 +44,8 @@ const slice = createSlice({
       const index = users.list.findIndex((user) => user._id === userId);
       users.list[index] = action.payload;
       users.loading = false;
+      const name = concatName(action.payload);
+      toast.success(`${name}'s account has been updated successfully.`);
     },
     accountDeleted: (users, action) => {
       const userId = action.payload;
