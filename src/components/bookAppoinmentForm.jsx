@@ -4,7 +4,6 @@ import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Col, Button, Card, Alert } from "react-bootstrap";
 import _ from "lodash";
-import { toast } from "react-toastify";
 // TODO: get states/provinces data from backend instead of json file
 import states from "../canadian-states.json";
 import { getUser } from "../store/auth";
@@ -105,9 +104,7 @@ const BookAppointmentForm = () => {
       "therapist",
       "zip",
     ]);
-    console.log(appointment);
     dispatch(addAppointment(appointment));
-    toast.success("Your appointment has been submitted successfully");
   };
 
   return (
@@ -117,6 +114,7 @@ const BookAppointmentForm = () => {
           <div className="row justify-content-center">
             <div className="col-lg-12">
               <Card className="mt-3">
+                <Card.Header as="h2">Book an appointment</Card.Header>
                 <Card.Body>
                   <Form.Row>
                     <Form.Group as={Col}>

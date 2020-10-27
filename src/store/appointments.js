@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { apiCallBegan } from "./api";
+import { toast } from "react-toastify";
 import moment from "moment";
 import memoize from "lodash.memoize";
 import { concatName, concatAddress } from "../utils/utils";
@@ -25,6 +26,13 @@ const slice = createSlice({
     appointmentAdded: (appointments, action) => {
       appointments.list.push(action.payload);
       appointments.loading = false;
+      toast.success("Appointment has been submitted successfully");
+    },
+    appointmentAddRequested: (appointments, action) => {
+      appointments.loading = true;
+    },
+    appointmentAddFailed: (appointments, action) => {
+      appointments.loading = false;
     },
     appointmentEdited: (appointments, action) => {
       const { _id: appointmentId } = action.payload;
@@ -33,21 +41,24 @@ const slice = createSlice({
       );
       appointments.list[index] = action.payload;
       appointments.loading = false;
-    },
-    appointmentDeleted: (appointments, action) => {
-      console.log(action.payload);
-      appointments.list.filter((appointment) => !appointment.isDeleted);
-    },
-    appointmentAddRequested: (appointments, action) => {
-      appointments.loading = true;
-    },
-    appointmentAddFailed: (appointments, action) => {
-      appointments.loading = false;
+      toast.success("Appointment has been updated successfully");
     },
     appointmentEditRequested: (appointments, action) => {
       appointments.loading = true;
     },
     appointmentEditFailed: (appointments, action) => {
+      appointments.loading = false;
+    },
+    appointmentDeleted: (appointments, action) => {
+      console.log(action.payload);
+      appointments.list.filter((appointment) => !appointment.isDeleted);
+      appointments.loading = false;
+      toast.success("Appointment has been deleted successfully");
+    },
+    deleteAppointmentRequested: (appointments, action) => {
+      appointments.loading = true;
+    },
+    deleteAppointmentFailed: (appointments, action) => {
       appointments.loading = false;
     },
   },
@@ -64,6 +75,8 @@ const {
   appointmentAddFailed,
   appointmentEditRequested,
   appointmentEditFailed,
+  deleteAppointmentRequested,
+  deleteAppointmentFailed,
 } = slice.actions;
 export default slice.reducer;
 const url = "/bookings";
@@ -107,9 +120,9 @@ export const deleteAppointment = (appointmentId) => {
   return apiCallBegan({
     url: `${url}/delete/${appointmentId}`,
     method: "PUT",
-    onStart: appointmentAddRequested.type,
+    onStart: deleteAppointmentRequested.type,
     onSuccess: appointmentDeleted.type,
-    onError: appointmentAddFailed.type,
+    onError: deleteAppointmentFailed.type,
   });
 };
 

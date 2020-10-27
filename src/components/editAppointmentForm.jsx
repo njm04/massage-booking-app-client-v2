@@ -9,7 +9,6 @@ import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Col, Card, Alert } from "react-bootstrap";
 import _ from "lodash";
-import { toast } from "react-toastify";
 // TODO: get states/provinces data from backend instead of json file
 import states from "../canadian-states.json";
 import { loadUsers, getTherapistSchedules } from "../store/users";
@@ -110,7 +109,6 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
       payload.prevTherapist = appointment.therapist._id;
 
     dispatch(editAppointment(appointment._id, payload));
-    toast.success("Your appointment has been updated successfully");
   };
 
   /*
