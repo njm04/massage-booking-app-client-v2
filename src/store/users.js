@@ -5,6 +5,7 @@ import _ from "lodash";
 import moment from "moment";
 import { apiCallBegan } from "./api";
 import { concatName, toastMessage } from "../utils/utils";
+import auth from "../services/authService";
 
 const slice = createSlice({
   name: "users",
@@ -167,6 +168,30 @@ export const getTherapists = createSelector(
     users.list.filter(
       (user) => user.userType.name === "therapist" && user.status === "active"
     )
+);
+
+export const getTherapistsCalendarSchedules = createSelector(
+  (state) => state.entities.users,
+  (users) => {
+    const currentUser = auth.getCurrentUser();
+    if (currentUser) {
+      if (currentUser.userType.name === "admin") {
+        return users.list.filter(
+          (user) =>
+            user.userType.name === "therapist" && user.status === "active"
+        );
+      }
+
+      if (currentUser.userType.name === "therapist") {
+        return users.list.filter(
+          (user) =>
+            user._id === currentUser._id &&
+            user.userType.name === "therapist" &&
+            user.status === "active"
+        );
+      }
+    }
+  }
 );
 
 export const getTherapistSchedules = createSelector(
