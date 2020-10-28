@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUsers, getTherapistsCalendarSchedules } from "../store/users";
-import auth from "../services/authService";
+import { getUser } from "../store/auth";
 import { Redirect } from "@reach/router";
 
 const localizer = momentLocalizer(moment);
@@ -11,6 +11,7 @@ const localizer = momentLocalizer(moment);
 const SchedulesCalendar = () => {
   const dispatch = useDispatch();
   const therapists = useSelector(getTherapistsCalendarSchedules);
+  const user = useSelector(getUser);
 
   const scheds = therapists
     ? therapists
@@ -38,10 +39,8 @@ const SchedulesCalendar = () => {
     dispatch(loadUsers());
   }, [dispatch]);
 
-  if (auth.getCurrentUser()) {
-    const userType = auth.getCurrentUser().userType.name;
-    if (userType === "customer") return <Redirect to="/" noThrow />;
-  }
+  if (user && user.userType && user.userType.name === "customer")
+    return <Redirect to="/" noThrow />;
 
   return (
     <div className="container mt-3 col-lg-12" style={{ height: "100vh" }}>

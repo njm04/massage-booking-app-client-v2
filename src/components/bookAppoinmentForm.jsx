@@ -15,7 +15,6 @@ import Input from "./common/input";
 import Spinner from "./common/spinner";
 import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
 import { concatName } from "../utils/utils";
-import auth from "../services/authService";
 
 const getCities = (abbreviation) => {
   const provAbbreviation = !abbreviation ? "AB" : abbreviation;
@@ -109,8 +108,8 @@ const BookAppointmentForm = () => {
     dispatch(addAppointment(appointment));
   };
 
-  const userType = auth.getCurrentUser().userType.name;
-  if (userType === "therapist") return <Redirect to="/" noThrow />;
+  if (user && user.userType && user.userType.name === "therapist")
+    return <Redirect to="/" noThrow />;
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>

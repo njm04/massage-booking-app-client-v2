@@ -8,7 +8,7 @@ import BirthDatePicker from "./common/birthDatePicker";
 import { createUsersValidationSchema } from "../validation/usersValidationSchema";
 import { createAccount, isLoading } from "../store/users";
 import { loadUserTypes, getUserTypes } from "../store/userTypes";
-import auth from "../services/authService";
+import { getUser } from "../store/auth";
 import Input from "./common/input";
 import Error from "./common/error";
 import Spinner from "./common/spinner";
@@ -17,6 +17,7 @@ const CreateUser = () => {
   const dispatch = useDispatch();
   const userTypes = useSelector(getUserTypes);
   const loading = useSelector(isLoading);
+  const user = useSelector(getUser);
   const defaultValues = {
     birthDate: null,
     gender: "",
@@ -52,9 +53,10 @@ const CreateUser = () => {
     if (isSubmitSuccessful) reset(defaultValues);
   }, [isSubmitSuccessful, reset, defaultValues]);
 
-  const userType = auth.getCurrentUser().userType.name;
-  if (userType === "therapist" || userType === "customer")
-    return <Redirect to="/" noThrow />;
+  if (user && user.userType) {
+    if (user.userType.name === "therapist" || user.userType.name === "customer")
+      return <Redirect to="/" noThrow />;
+  }
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
