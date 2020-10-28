@@ -116,6 +116,17 @@ export const editAppointment = (appointmentId, appointment) => {
   });
 };
 
+export const updateAppointmentStatus = (appointmentId, data) => {
+  return apiCallBegan({
+    url: `${url}/update-status/${appointmentId}`,
+    method: "PUT",
+    data,
+    onStart: appointmentEditRequested.type,
+    onSuccess: appointmentEdited.type,
+    onError: appointmentEditFailed.type,
+  });
+};
+
 export const deleteAppointment = (appointmentId) => {
   return apiCallBegan({
     url: `${url}/delete/${appointmentId}`,
