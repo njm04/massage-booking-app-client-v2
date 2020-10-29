@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Col, Button, Card, Alert } from "react-bootstrap";
+import { Form, Col, Button, Card } from "react-bootstrap";
 import { Redirect } from "@reach/router";
 import _ from "lodash";
 // TODO: get states/provinces data from backend instead of json file
@@ -10,31 +10,13 @@ import states from "../canadian-states.json";
 import { getUser } from "../store/auth";
 import { getTherapists, loadUsers } from "../store/users";
 import { addAppointment, isLoading } from "../store/appointments";
+import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
+import { concatName, getCities } from "../utils/utils";
+import { massageDuration, massageTypes } from "../constants";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
 import Spinner from "./common/spinner";
 import Error from "./common/error";
-import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
-import { concatName } from "../utils/utils";
-
-const getCities = (abbreviation) => {
-  const provAbbreviation = !abbreviation ? "AB" : abbreviation;
-  return _.find(states, ["abbreviation", provAbbreviation]).cities;
-};
-
-const massageDuration = [
-  // { massageDuration: 30, label: "30 minutes" },
-  { massageDuration: 60, label: "60 minutes" },
-  { massageDuration: 90, label: "90 minutes" },
-  { massageDuration: 120, label: "120 minutes" },
-];
-
-const massageTypes = [
-  "Whole body massage",
-  "Head massage",
-  "Foot massage",
-  "Back massage",
-];
 
 const BookAppointmentForm = () => {
   const user = useSelector(getUser);

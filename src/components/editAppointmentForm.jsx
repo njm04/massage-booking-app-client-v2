@@ -7,7 +7,7 @@ import React, {
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
-import { Form, Col, Card, Alert } from "react-bootstrap";
+import { Form, Col, Card } from "react-bootstrap";
 import _ from "lodash";
 // TODO: get states/provinces data from backend instead of json file
 import states from "../canadian-states.json";
@@ -17,30 +17,12 @@ import {
   editAppointment,
   isLoading,
 } from "../store/appointments";
-import { concatName } from "../utils/utils";
+import { concatName, getCities } from "../utils/utils";
+import { massageDuration, massageTypes } from "../constants";
 import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
 import Error from "./common/error";
-
-const getCities = (abbreviation) => {
-  const provAbbreviation = !abbreviation ? "AB" : abbreviation;
-  return _.find(states, ["abbreviation", provAbbreviation]).cities;
-};
-
-const massageDuration = [
-  // { massageDuration: 30, label: "30 minutes" },
-  { massageDuration: 60, label: "60 minutes" },
-  { massageDuration: 90, label: "90 minutes" },
-  { massageDuration: 120, label: "120 minutes" },
-];
-
-const massageTypes = [
-  "Whole body massage",
-  "Head massage",
-  "Foot massage",
-  "Back massage",
-];
 
 let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
   // data from useSelector(getTherapists) is empty on the first render
