@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import DatePicker from "react-datepicker";
 
 const BirthDatePicker = ({ value, onChange }) => {
-  // const [startDate, setStartDate] = useState(new Date());
   return (
     <DatePicker
       className="form-control"

@@ -54,7 +54,6 @@ const BookAppointmentForm = () => {
 
   const getTherapistsSchedules = () => {
     const therapistId = watch("therapist");
-    console.log("inside: ", therapistId);
     const therapist = therapists.find(
       (therapist) => therapist._id === therapistId
     );
