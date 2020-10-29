@@ -15,6 +15,7 @@ const AppointmentsHistory = () => {
 
   const columns = [
     { label: "Name", path: "name" },
+    { label: "Email", path: "email" },
     { label: "Massage type", path: "massageType" },
     { label: "Duration", path: "duration" },
     { label: "Therapist", path: "therapistName" },
