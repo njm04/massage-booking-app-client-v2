@@ -11,7 +11,7 @@ import { getUser } from "../store/auth";
 import { getTherapists, loadUsers } from "../store/users";
 import { addAppointment, isLoading } from "../store/appointments";
 import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
-import { concatName, getCities } from "../utils/utils";
+import { concatName, getCities, createDefaultValues } from "../utils/utils";
 import { massageDuration, massageTypes } from "../constants";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
@@ -23,22 +23,9 @@ const BookAppointmentForm = () => {
   const therapists = useSelector(getTherapists);
   const loading = useSelector(isLoading);
   const dispatch = useDispatch();
-  const { firstName, lastName } = user;
   const [therapistSched, setTherapistSched] = useState([]);
-  const defaultValues = {
-    firstName: firstName,
-    lastName: lastName,
-    address: "",
-    addressTwo: "",
-    state: "AB",
-    city: "Banff",
-    zip: "",
-    duration: 60,
-    date: null,
-    contactNumber: "",
-    massageType: "Whole body massage",
-    therapist: "",
-  };
+  const condition = user && user.userType && user.userType.name === "admin";
+  const defaultValues = createDefaultValues(user);
   const {
     register,
     handleSubmit,
@@ -77,19 +64,7 @@ const BookAppointmentForm = () => {
   }, [isSubmitSuccessful, reset, defaultValues, therapists]);
 
   const onSubmit = (data) => {
-    const appointment = _.pick(data, [
-      "address",
-      "addressTwo",
-      "city",
-      "contactNumber",
-      "date",
-      "duration",
-      "massageType",
-      "state",
-      "therapist",
-      "zip",
-    ]);
-    dispatch(addAppointment(appointment));
+    dispatch(addAppointment(data));
   };
 
   if (user && user.userType && user.userType.name === "therapist")
@@ -111,7 +86,7 @@ const BookAppointmentForm = () => {
                         placeholder="Enter first name"
                         label="First Name"
                         register={register}
-                        readOnly
+                        readOnly={condition ? false : true}
                       />
                       {errors.firstName && (
                         <Error message={errors.firstName.message} />
@@ -124,12 +99,26 @@ const BookAppointmentForm = () => {
                         placeholder="Enter last name"
                         label="Last Name"
                         register={register}
-                        readOnly
+                        readOnly={condition ? false : true}
                       />
                       {errors.lastName && (
                         <Error message={errors.lastName.message} />
                       )}
                     </Form.Group>
+
+                    {condition ? (
+                      <Form.Group as={Col} controlId="email">
+                        <Input
+                          name="email"
+                          placeholder="Enter email"
+                          label="Email"
+                          register={register}
+                        />
+                        {errors.email && (
+                          <Error message={errors.email.message} />
+                        )}
+                      </Form.Group>
+                    ) : null}
                   </Form.Row>
 
                   <Form.Group controlId="addressOne">

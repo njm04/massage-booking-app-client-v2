@@ -157,9 +157,8 @@ export const getAppointments = createSelector(
       .map((appointment) => {
         return {
           id: appointment._id,
-          name: concatName(appointment.user),
-          firstName: appointment.user.firstName,
-          lastName: appointment.user.lastName,
+          name: concatName(appointment.customer),
+          email: appointment.customer.email,
           massageType: appointment.massageType,
           duration: appointment.duration + " minutes",
           contactNumber: appointment.contactNumber,
@@ -184,9 +183,8 @@ export const getCompletedAppointments = createSelector(
       .map((appointment) => {
         return {
           id: appointment._id,
-          name: concatName(appointment.user),
-          firstName: appointment.user.firstName,
-          lastName: appointment.user.lastName,
+          name: concatName(appointment.customer),
+          email: appointment.customer.email,
           massageType: appointment.massageType,
           duration: appointment.duration + " minutes",
           contactNumber: appointment.contactNumber,

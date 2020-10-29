@@ -17,7 +17,8 @@ import {
   editAppointment,
   isLoading,
 } from "../store/appointments";
-import { concatName, getCities } from "../utils/utils";
+import { getUser } from "../store/auth";
+import { concatName, getCities, createDefaultValues } from "../utils/utils";
 import { massageDuration, massageTypes } from "../constants";
 import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
 import ReactDatePicker from "./common/reactDatePicker";
@@ -29,22 +30,16 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
   // for now im initializing the therapists data from the appointments table
   // const therapists = useSelector(getTherapists);
   const dispatch = useDispatch();
+  const user = useSelector(getUser);
   const loading = useSelector(isLoading);
   const appointment = useSelector(getAppointmentById)(appointmentId);
-  const defaultValues = {
-    firstName: appointment.user.firstName,
-    lastName: appointment.user.lastName,
-    address: appointment.address,
-    addressTwo: appointment.addressTwo,
-    state: appointment.state,
-    city: appointment.city,
-    zip: appointment.zip,
-    duration: appointment.duration,
-    date: new Date(appointment.date),
-    contactNumber: appointment.contactNumber,
-    massageType: appointment.massageType,
-    therapist: appointment.therapist._id,
-  };
+  const condition =
+    user &&
+    user.userType &&
+    user.userType.name === "admin" &&
+    appointment.createdBy._id === user._id;
+  const defaultValues = createDefaultValues(user, appointment);
+  console.log(defaultValues);
   const { register, handleSubmit, watch, errors, control } = useForm({
     resolver: yupResolver(appointmentFormSchema),
     defaultValues,
@@ -76,6 +71,9 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
   // TODO: make submit functional
   const onSubmit = (data) => {
     const payload = _.pick(data, [
+      "firstName",
+      "lastName",
+      "email",
       "address",
       "addressTwo",
       "city",
@@ -118,7 +116,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                         placeholder="Enter first name"
                         label="First Name"
                         register={register}
-                        readOnly
+                        readOnly={condition ? false : true}
                       />
                       {errors.firstName && (
                         <Error message={errors.firstName.message} />
@@ -131,11 +129,22 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                         placeholder="Enter last name"
                         label="Last Name"
                         register={register}
-                        readOnly
+                        readOnly={condition ? false : true}
                       />
                       {errors.lastName && (
                         <Error message={errors.lastName.message} />
                       )}
+                    </Form.Group>
+
+                    <Form.Group as={Col} controlId="email">
+                      <Input
+                        name="email"
+                        placeholder="Enter email"
+                        label="Email"
+                        register={register}
+                        readOnly={condition ? false : true}
+                      />
+                      {errors.email && <Error message={errors.email.message} />}
                     </Form.Group>
                   </Form.Row>
 

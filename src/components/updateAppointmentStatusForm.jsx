@@ -2,7 +2,6 @@ import React, { useImperativeHandle, forwardRef } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Col, Card } from "react-bootstrap";
-import _ from "lodash";
 import {
   getAppointmentById,
   isLoading,
@@ -20,7 +19,7 @@ let UpdateAppointmentStatusModal = ({ appointmentId }, ref) => {
   const loading = useSelector(isLoading);
   const appointment = useSelector(getAppointmentById)(appointmentId);
   const defaultValues = {
-    customer: concatName(appointment.user),
+    customer: concatName(appointment.customer),
     duration: appointment.duration + " minutes",
     date: moment(appointment.date).format("MMMM d, yyyy h:mm A"),
     contactNumber: appointment.contactNumber,
