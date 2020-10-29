@@ -11,7 +11,7 @@ const NavBar = () => {
 
   return (
     <Navbar bg="dark" variant="dark">
-      <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+      <Navbar.Brand href="/">Massage Clinic</Navbar.Brand>
       <Nav className="mr-auto">
         <NavLink to="/" className="nav-link">
           Appointments
