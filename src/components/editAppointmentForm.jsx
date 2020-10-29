@@ -39,7 +39,6 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
     user.userType.name === "admin" &&
     appointment.createdBy._id === user._id;
   const defaultValues = createDefaultValues(user, appointment);
-  console.log(defaultValues);
   const { register, handleSubmit, watch, errors, control } = useForm({
     resolver: yupResolver(appointmentFormSchema),
     defaultValues,

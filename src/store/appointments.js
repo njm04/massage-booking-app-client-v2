@@ -50,7 +50,6 @@ const slice = createSlice({
       appointments.loading = false;
     },
     appointmentDeleted: (appointments, action) => {
-      console.log(action.payload);
       appointments.list.filter((appointment) => !appointment.isDeleted);
       appointments.loading = false;
       toast.success("Appointment has been deleted successfully");
