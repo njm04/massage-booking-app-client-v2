@@ -1,4 +1,6 @@
+import _ from "lodash";
 import { toast } from "react-toastify";
+import states from "../canadian-states.json";
 
 export const concatName = (item) => {
   return `${item.firstName} ${item.lastName}`;
@@ -17,4 +19,9 @@ export const toastMessage = (obj) => {
       `${obj.userType.name.toUpperCase()} account successfully created.`
     );
   }
+};
+
+export const getCities = (abbreviation) => {
+  const provAbbreviation = !abbreviation ? "AB" : abbreviation;
+  return _.find(states, ["abbreviation", provAbbreviation]).cities;
 };
