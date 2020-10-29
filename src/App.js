@@ -3,7 +3,7 @@ import "./App.css";
 import { Router } from "@reach/router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AppointmentsTable from "./components/appointmentsTable";
+import AppointmentsTabs from "./components/appointmentsTabs";
 import Login from "./components/login";
 import PrivateRoute from "./components/common/privateRoute";
 import BookAppointmentForm from "./components/bookAppoinmentForm";
@@ -25,7 +25,7 @@ function App() {
         <Login path="/login" />
         <Registration path="/registration" />
         <PrivateRoute as={Dashboard} path="/">
-          <PrivateRoute as={AppointmentsTable} path="/" />
+          <PrivateRoute as={AppointmentsTabs} path="/" />
           <PrivateRoute as={BookAppointmentForm} path="/book-appointment" />
           <PrivateRoute as={SchedulesCalendar} path="/calendar" />
           <PrivateRoute as={CreateUser} path="/create-user" />
