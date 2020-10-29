@@ -148,22 +148,55 @@ export const getAppointmentById = createSelector(
 export const getAppointments = createSelector(
   (state) => state.entities.appointments,
   (appointments) =>
-    appointments.list.map((appointment) => {
-      return {
-        id: appointment._id,
-        name: concatName(appointment.user),
-        firstName: appointment.user.firstName,
-        lastName: appointment.user.lastName,
-        massageType: appointment.massageType,
-        duration: appointment.duration + " minutes",
-        contactNumber: appointment.contactNumber,
-        address: concatAddress(appointment),
-        therapistId: appointment.therapist._id,
-        therapistName: concatName(appointment.therapist),
-        date: moment(appointment.date).format("MMMM D YYYY, h:mm A"),
-        status: appointment.status,
-      };
-    })
+    appointments.list
+      .filter(
+        (appointment) =>
+          appointment.status !== "completed" &&
+          appointment.status !== "cancelled"
+      )
+      .map((appointment) => {
+        return {
+          id: appointment._id,
+          name: concatName(appointment.user),
+          firstName: appointment.user.firstName,
+          lastName: appointment.user.lastName,
+          massageType: appointment.massageType,
+          duration: appointment.duration + " minutes",
+          contactNumber: appointment.contactNumber,
+          address: concatAddress(appointment),
+          therapistId: appointment.therapist._id,
+          therapistName: concatName(appointment.therapist),
+          date: moment(appointment.date).format("MMMM D YYYY, h:mm A"),
+          status: appointment.status,
+        };
+      })
+);
+
+export const getCompletedAppointments = createSelector(
+  (state) => state.entities.appointments,
+  (appointments) =>
+    appointments.list
+      .filter(
+        (appointment) =>
+          appointment.status === "completed" ||
+          appointment.status === "cancelled"
+      )
+      .map((appointment) => {
+        return {
+          id: appointment._id,
+          name: concatName(appointment.user),
+          firstName: appointment.user.firstName,
+          lastName: appointment.user.lastName,
+          massageType: appointment.massageType,
+          duration: appointment.duration + " minutes",
+          contactNumber: appointment.contactNumber,
+          address: concatAddress(appointment),
+          therapistId: appointment.therapist._id,
+          therapistName: concatName(appointment.therapist),
+          date: moment(appointment.date).format("MMMM D YYYY, h:mm A"),
+          status: appointment.status,
+        };
+      })
 );
 
 export const isLoading = createSelector(
