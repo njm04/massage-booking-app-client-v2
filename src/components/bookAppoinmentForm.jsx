@@ -13,6 +13,7 @@ import { addAppointment, isLoading } from "../store/appointments";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
 import Spinner from "./common/spinner";
+import Error from "./common/error";
 import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
 import { concatName } from "../utils/utils";
 
@@ -51,7 +52,7 @@ const BookAppointmentForm = () => {
     city: "Banff",
     zip: "",
     duration: 60,
-    date: "",
+    date: null,
     contactNumber: "",
     massageType: "Whole body massage",
     therapist: "",
@@ -69,11 +70,13 @@ const BookAppointmentForm = () => {
     defaultValues,
   });
 
-  const therapistId = watch("therapist");
   const getTherapistsSchedules = () => {
+    const therapistId = watch("therapist");
+    console.log("inside: ", therapistId);
     const therapist = therapists.find(
       (therapist) => therapist._id === therapistId
     );
+
     const schedules = therapist.reservations.map((schedule) => ({
       date: schedule.date,
       duration: schedule.duration,
@@ -130,9 +133,7 @@ const BookAppointmentForm = () => {
                         readOnly
                       />
                       {errors.firstName && (
-                        <Alert variant="danger">
-                          {errors.firstName.message}
-                        </Alert>
+                        <Error message={errors.firstName.message} />
                       )}
                     </Form.Group>
 
@@ -145,9 +146,7 @@ const BookAppointmentForm = () => {
                         readOnly
                       />
                       {errors.lastName && (
-                        <Alert variant="danger">
-                          {errors.lastName.message}
-                        </Alert>
+                        <Error message={errors.lastName.message} />
                       )}
                     </Form.Group>
                   </Form.Row>
@@ -160,7 +159,7 @@ const BookAppointmentForm = () => {
                       register={register}
                     />
                     {errors.address && (
-                      <Alert variant="danger">{errors.address.message}</Alert>
+                      <Error message={errors.address.message} />
                     )}
                   </Form.Group>
 
@@ -172,9 +171,7 @@ const BookAppointmentForm = () => {
                       register={register}
                     />
                     {errors.addressTwo && (
-                      <Alert variant="danger">
-                        {errors.addressTwo.message}
-                      </Alert>
+                      <Error message={errors.addressTwo.message} />
                     )}
                   </Form.Group>
 
@@ -191,9 +188,7 @@ const BookAppointmentForm = () => {
                           </option>
                         ))}
                       </Form.Control>
-                      {errors.state && (
-                        <Alert variant="danger">{errors.state.message}</Alert>
-                      )}
+                      {errors.state && <Error message={errors.state.message} />}
                     </Form.Group>
                     <Form.Group as={Col} controlId="city">
                       <Form.Label>City</Form.Label>
@@ -204,15 +199,11 @@ const BookAppointmentForm = () => {
                           </option>
                         ))}
                       </Form.Control>
-                      {errors.city && (
-                        <Alert variant="danger">{errors.city.message}</Alert>
-                      )}
+                      {errors.city && <Error message={errors.city.message} />}
                     </Form.Group>
                     <Form.Group as={Col} controlId="zip">
                       <Input name="zip" label="Zip" register={register} />
-                      {errors.zip && (
-                        <Alert variant="danger">{errors.zip.message}</Alert>
-                      )}
+                      {errors.zip && <Error message={errors.zip.message} />}
                     </Form.Group>
                   </Form.Row>
                   <Form.Row>
@@ -234,31 +225,24 @@ const BookAppointmentForm = () => {
                         ))}
                       </Form.Control>
                       {errors.therapist && (
-                        <Alert variant="danger">
-                          {errors.therapist.message}
-                        </Alert>
+                        <Error message={errors.therapist.message} />
                       )}
                     </Form.Group>
                     <Form.Group as={Col} controlId="dateTime">
                       <Form.Label>Date/Time</Form.Label>
-                      {/* validation not working */}
                       <Controller
                         control={control}
                         name="date"
                         render={(props) => (
                           <ReactDatePicker
-                            disabled={!therapistId ? true : false}
+                            disabled={!watch("therapist") ? true : false}
                             schedules={therapistSched}
                             value={props.value}
                             onChange={props.onChange}
                           />
                         )}
                       />
-                      {errors.dateTimePicker && (
-                        <Alert variant="danger">
-                          {errors.dateTimePicker.message}
-                        </Alert>
-                      )}
+                      {errors.date && <Error message={errors.date.message} />}
                     </Form.Group>
                     <Form.Group as={Col} controlId="duration">
                       <Form.Label>Duration</Form.Label>
@@ -273,9 +257,7 @@ const BookAppointmentForm = () => {
                         ))}
                       </Form.Control>
                       {errors.duration && (
-                        <Alert variant="danger">
-                          {errors.duration.message}
-                        </Alert>
+                        <Error message={errors.duration.message} />
                       )}
                     </Form.Group>
                   </Form.Row>
@@ -294,9 +276,7 @@ const BookAppointmentForm = () => {
                         ))}
                       </Form.Control>
                       {errors.massageType && (
-                        <Alert variant="danger">
-                          {errors.massageType.message}
-                        </Alert>
+                        <Error message={errors.massageType.message} />
                       )}
                     </Form.Group>
                     <Form.Group as={Col} controlId="contactNumber">
@@ -306,9 +286,7 @@ const BookAppointmentForm = () => {
                         register={register}
                       />
                       {errors.contactNumber && (
-                        <Alert variant="danger">
-                          {errors.contactNumber.message}
-                        </Alert>
+                        <Error message={errors.contactNumber.message} />
                       )}
                     </Form.Group>
                   </Form.Row>

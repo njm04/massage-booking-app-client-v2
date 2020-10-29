@@ -19,6 +19,6 @@ export const appointmentFormSchema = yup.object().shape({
   state: yup.string().max(255).required("State/Province is a required field"),
   city: yup.string().min(3).max(255).required("City is a required field"),
   zip: yup.string().min(6).max(255).required("Zip is a required field"),
-  date: yup.date().required("Date and time is a required field"),
+  date: yup.date().required("Date and time is a required field").nullable(),
   therapist: yup.string().required("Therapist is a required field"),
 });

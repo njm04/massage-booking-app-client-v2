@@ -17,10 +17,11 @@ import {
   editAppointment,
   isLoading,
 } from "../store/appointments";
+import { concatName } from "../utils/utils";
 import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
-import { concatName } from "../utils/utils";
+import Error from "./common/error";
 
 const getCities = (abbreviation) => {
   const provAbbreviation = !abbreviation ? "AB" : abbreviation;
@@ -138,9 +139,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                         readOnly
                       />
                       {errors.firstName && (
-                        <Alert variant="danger">
-                          {errors.firstName.message}
-                        </Alert>
+                        <Error message={errors.firstName.message} />
                       )}
                     </Form.Group>
 
@@ -153,9 +152,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                         readOnly
                       />
                       {errors.lastName && (
-                        <Alert variant="danger">
-                          {errors.lastName.message}
-                        </Alert>
+                        <Error message={errors.lastName.message} />
                       )}
                     </Form.Group>
                   </Form.Row>
@@ -168,7 +165,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                       register={register}
                     />
                     {errors.address && (
-                      <Alert variant="danger">{errors.address.message}</Alert>
+                      <Error message={errors.address.message} />
                     )}
                   </Form.Group>
 
@@ -180,9 +177,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                       register={register}
                     />
                     {errors.addressTwo && (
-                      <Alert variant="danger">
-                        {errors.addressTwo.message}
-                      </Alert>
+                      <Error message={errors.addressTwo.message} />
                     )}
                   </Form.Group>
 
@@ -199,9 +194,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                           </option>
                         ))}
                       </Form.Control>
-                      {errors.state && (
-                        <Alert variant="danger">{errors.state.message}</Alert>
-                      )}
+                      {errors.state && <Error message={errors.state.message} />}
                     </Form.Group>
                     <Form.Group as={Col} controlId="city">
                       <Form.Label>City</Form.Label>
@@ -212,15 +205,11 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                           </option>
                         ))}
                       </Form.Control>
-                      {errors.city && (
-                        <Alert variant="danger">{errors.city.message}</Alert>
-                      )}
+                      {errors.city && <Error message={errors.city.message} />}
                     </Form.Group>
                     <Form.Group as={Col} controlId="zip">
                       <Input name="zip" label="Zip" register={register} />
-                      {errors.zip && (
-                        <Alert variant="danger">{errors.zip.message}</Alert>
-                      )}
+                      {errors.zip && <Error message={errors.zip.message} />}
                     </Form.Group>
                   </Form.Row>
                   <Form.Row>
@@ -242,9 +231,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                         ))}
                       </Form.Control>
                       {errors.therapist && (
-                        <Alert variant="danger">
-                          {errors.therapist.message}
-                        </Alert>
+                        <Error message={errors.therapist.message} />
                       )}
                     </Form.Group>
                     <Form.Group as={Col} controlId="dateTime">
@@ -262,11 +249,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                           />
                         )}
                       />
-                      {errors.dateTimePicker && (
-                        <Alert variant="danger">
-                          {errors.dateTimePicker.message}
-                        </Alert>
-                      )}
+                      {errors.date && <Error message={errors.date.message} />}
                     </Form.Group>
                     <Form.Group as={Col} controlId="duration">
                       <Form.Label>Duration</Form.Label>
@@ -281,9 +264,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                         ))}
                       </Form.Control>
                       {errors.duration && (
-                        <Alert variant="danger">
-                          {errors.duration.message}
-                        </Alert>
+                        <Error message={errors.duration.message} />
                       )}
                     </Form.Group>
                   </Form.Row>
@@ -302,9 +283,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                         ))}
                       </Form.Control>
                       {errors.massageType && (
-                        <Alert variant="danger">
-                          {errors.massageType.message}
-                        </Alert>
+                        <Error message={errors.massageType.message} />
                       )}
                     </Form.Group>
                     <Form.Group as={Col} controlId="contactNumber">
@@ -314,9 +293,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                         register={register}
                       />
                       {errors.contactNumber && (
-                        <Alert variant="danger">
-                          {errors.contactNumber.message}
-                        </Alert>
+                        <Error message={errors.contactNumber.message} />
                       )}
                     </Form.Group>
                   </Form.Row>
