@@ -3,38 +3,41 @@ import DatePicker from "react-datepicker";
 import { setHours, setMinutes, addDays } from "date-fns";
 
 const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
-  const [chosenDate, setChosenDate] = useState("");
+  const [times, setTimes] = useState([]);
+
+  const onCalendarOpen = () => {
+    setTimes(
+      schedules.map((schedule) => {
+        let minutes = 0;
+        let hours = 0;
+        const date = new Date(schedule.date);
+        const currentDate = new Date();
+        if (currentDate.getDate() === date.getDate()) {
+          minutes = date.getMinutes();
+          hours = date.getHours();
+          return setHours(setMinutes(date, minutes), hours);
+        }
+        return null;
+      })
+    );
+  };
 
   // exclude times depending on chosenDate
-  const times = schedules.map((schedule) => {
-    let minutes = 0;
-    let hours = 0;
-    const date = new Date(schedule.date);
-    const currentDate = new Date();
-    if (new Date(chosenDate).getDate() === date.getDate()) {
-      minutes = date.getMinutes();
-      hours = date.getHours();
-      return setHours(setMinutes(date, minutes), hours);
-    }
-    if (new Date(chosenDate).getDate() !== date.getDate()) {
-      return null;
-    }
-
-    if (!chosenDate && currentDate.getDate() === date.getDate()) {
-      minutes = date.getMinutes();
-      hours = date.getHours();
-
-      return setHours(setMinutes(date, minutes), hours);
-    }
-
-    if (!chosenDate) {
-      minutes = date.getMinutes();
-      hours = date.getHours();
-
-      return setHours(setMinutes(date, minutes), hours);
-    }
-    return null;
-  });
+  const handleTimeChange = (chosenDate) => {
+    setTimes(
+      schedules.map((schedule) => {
+        let minutes = 0;
+        let hours = 0;
+        const date = new Date(schedule.date);
+        if (new Date(chosenDate).getDate() === date.getDate()) {
+          minutes = date.getMinutes();
+          hours = date.getHours();
+          return setHours(setMinutes(date, minutes), hours);
+        }
+        return null;
+      })
+    );
+  };
 
   return (
     <DatePicker
@@ -42,9 +45,10 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
       className="form-control"
       selected={value}
       placeholderText="Select date"
+      onCalendarOpen={onCalendarOpen}
       onChange={(e) => {
         onChange(e);
-        setChosenDate(e);
+        handleTimeChange(e);
       }}
       showTimeSelect
       excludeTimes={times}
