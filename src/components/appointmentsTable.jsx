@@ -49,6 +49,8 @@ const AppointmentsTable = () => {
             ? "danger"
             : item.status === "ongoing"
             ? "warning"
+            : item.status === "cancelled"
+            ? "dark"
             : "success";
         return <Badge variant={variant}>{item.status}</Badge>;
       },
