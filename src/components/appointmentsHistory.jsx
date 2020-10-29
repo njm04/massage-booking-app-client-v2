@@ -1,36 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   loadAppointments,
   getCompletedAppointments,
-  deleteAppointment,
   isLoading,
 } from "../store/appointments";
-import { getTherapists, loadUsers } from "../store/users";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import { Button, Spinner, Badge } from "react-bootstrap";
+import { Spinner, Badge } from "react-bootstrap";
 import Table from "./common/table";
-import FormModal from "./formModal";
 
 const AppointmentsHistory = () => {
   const dispatch = useDispatch();
-  const therapists = useSelector(getTherapists);
   const appointments = useSelector(getCompletedAppointments);
   const loading = useSelector(isLoading);
-  const [appointmentId, setAppointmentId] = useState("");
-  const [show, setShow] = useState(false);
-  const [appointmentDeleteId, setAppointmentDeleteId] = useState("");
-
-  // data came from tableBody and passed to content() then to handleShow
-  const handleShow = (id) => {
-    setShow(true);
-    setAppointmentId(id);
-  };
-
-  const handleDelete = (id) => {
-    dispatch(deleteAppointment(id));
-    setAppointmentDeleteId(id);
-  };
 
   const columns = [
     { label: "Name", path: "name" },
@@ -59,9 +40,8 @@ const AppointmentsHistory = () => {
 
   useEffect(() => {
     dispatch(loadAppointments());
-    dispatch(loadUsers());
     console.log("i fire once");
-  }, [dispatch, appointmentDeleteId]);
+  }, [dispatch]);
 
   return (
     <>
@@ -74,13 +54,6 @@ const AppointmentsHistory = () => {
       ) : (
         <Table columns={columns} data={appointments} />
       )}
-      <FormModal
-        show={show}
-        setShow={setShow}
-        appointmentId={appointmentId}
-        therapists={therapists}
-        loading={loading}
-      />
     </>
   );
 };
