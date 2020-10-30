@@ -7,13 +7,15 @@ import {
   isLoading,
 } from "../store/appointments";
 import { getTherapists, loadUsers } from "../store/users";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
-import { Button, Spinner, Badge } from "react-bootstrap";
+import { getUser } from "../store/auth";
+import { Spinner } from "react-bootstrap";
 import Table from "./common/table";
 import FormModal from "./formModal";
+import { createColumns } from "../utils/utils";
 
 const AppointmentsTable = () => {
   const dispatch = useDispatch();
+  const user = useSelector(getUser);
   const therapists = useSelector(getTherapists);
   const appointments = useSelector(getAppointments);
   const loading = useSelector(isLoading);
@@ -32,47 +34,7 @@ const AppointmentsTable = () => {
     setAppointmentDeleteId(id);
   };
 
-  const columns = [
-    { label: "Name", path: "name" },
-    { label: "Email", path: "email" },
-    { label: "Massage type", path: "massageType" },
-    { label: "Duration", path: "duration" },
-    { label: "Therapist", path: "therapistName" },
-    { label: "Contact number", path: "contactNumber" },
-    { label: "Address", path: "address" },
-    { label: "Date", path: "date" },
-    {
-      label: "Status",
-      key: "status",
-      content: (item) => {
-        const variant =
-          item.status === "pending"
-            ? "danger"
-            : item.status === "ongoing"
-            ? "warning"
-            : item.status === "cancelled"
-            ? "dark"
-            : "success";
-        return <Badge variant={variant}>{item.status}</Badge>;
-      },
-    },
-    {
-      key: "edit",
-      content: (item) => (
-        <Button variant="outline-info" onClick={() => handleShow(item.id)}>
-          <FaEdit />
-        </Button>
-      ),
-    },
-    {
-      key: "delete",
-      content: (item) => (
-        <Button variant="outline-danger" onClick={() => handleDelete(item.id)}>
-          <FaTrashAlt />
-        </Button>
-      ),
-    },
-  ];
+  const columns = createColumns(user, handleShow, handleDelete);
 
   useEffect(() => {
     dispatch(loadAppointments());
