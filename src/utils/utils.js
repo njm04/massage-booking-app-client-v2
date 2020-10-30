@@ -29,6 +29,23 @@ export const getCities = (abbreviation) => {
   return _.find(states, ["abbreviation", provAbbreviation]).cities;
 };
 
+export const handleChangeSchedules = (
+  therapistId,
+  therapists,
+  setTherapistSched
+) => {
+  const therapist = therapists.find(
+    (therapist) => therapist._id === therapistId
+  );
+
+  const schedules = therapist.reservations.map((schedule) => ({
+    date: schedule.date,
+    duration: schedule.duration,
+  }));
+
+  setTherapistSched(schedules);
+};
+
 export const createDefaultValues = (user, data = null) => {
   if (user && user.userType) {
     if (data && user.userType.name === "admin") {

@@ -11,7 +11,12 @@ import { getUser } from "../store/auth";
 import { getTherapists, loadUsers } from "../store/users";
 import { addAppointment, isLoading } from "../store/appointments";
 import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
-import { concatName, getCities, createDefaultValues } from "../utils/utils";
+import {
+  concatName,
+  getCities,
+  createDefaultValues,
+  handleChangeSchedules,
+} from "../utils/utils";
 import { massageDuration, massageTypes } from "../constants";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
@@ -38,20 +43,6 @@ const BookAppointmentForm = () => {
     resolver: yupResolver(appointmentFormSchema),
     defaultValues,
   });
-
-  const getTherapistsSchedules = () => {
-    const therapistId = watch("therapist");
-    const therapist = therapists.find(
-      (therapist) => therapist._id === therapistId
-    );
-
-    const schedules = therapist.reservations.map((schedule) => ({
-      date: schedule.date,
-      duration: schedule.duration,
-    }));
-
-    setTherapistSched(schedules);
-  };
   // watch value of province field and dynamically get city based on that
   const cities = getCities(watch("state"));
 
@@ -183,7 +174,13 @@ const BookAppointmentForm = () => {
                         as="select"
                         name="therapist"
                         ref={register}
-                        onChange={getTherapistsSchedules}
+                        onChange={() =>
+                          handleChangeSchedules(
+                            watch("therapist"),
+                            therapists,
+                            setTherapistSched
+                          )
+                        }
                       >
                         <option value="" disabled>
                           Select your therapist

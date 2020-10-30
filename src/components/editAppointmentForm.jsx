@@ -18,7 +18,12 @@ import {
   isLoading,
 } from "../store/appointments";
 import { getUser } from "../store/auth";
-import { concatName, getCities, createDefaultValues } from "../utils/utils";
+import {
+  concatName,
+  getCities,
+  createDefaultValues,
+  handleChangeSchedules,
+} from "../utils/utils";
 import { massageDuration, massageTypes } from "../constants";
 import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
 import ReactDatePicker from "./common/reactDatePicker";
@@ -49,18 +54,6 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
   const therapistId = watch("therapist");
   const schedules = useSelector(getTherapistSchedules)(therapistId);
   const [therapistSched, setTherapistSched] = useState(schedules);
-
-  const handleChangeSchedules = () => {
-    const therapist = therapists.find(
-      (therapist) => therapist._id === therapistId
-    );
-    const schedules = therapist.reservations.map((schedule) => ({
-      date: schedule.date,
-      duration: schedule.duration,
-    }));
-
-    setTherapistSched(schedules);
-  };
 
   useEffect(() => {
     dispatch(loadUsers());
@@ -209,7 +202,13 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
                         as="select"
                         name="therapist"
                         ref={register}
-                        onChange={handleChangeSchedules}
+                        onChange={() =>
+                          handleChangeSchedules(
+                            therapistId,
+                            therapists,
+                            setTherapistSched
+                          )
+                        }
                       >
                         <option value="" disabled>
                           Select your therapist
