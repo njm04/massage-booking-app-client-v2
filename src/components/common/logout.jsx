@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { FaSignOutAlt } from "react-icons/fa";
 import auth from "../../services/authService";
 import { navigate } from "@reach/router";
@@ -16,19 +16,10 @@ const Logout = () => {
   };
 
   return (
-    // <OverlayTrigger
-    //   key="bottom"
-    //   placement="bottom"
-    //   overlay={
-    //     <Tooltip id="bottom">
-    //       <strong>Log out</strong>.
-    //     </Tooltip>
-    //   }
-    // >
-    <Button variant="outline-light" onClick={handleLogout}>
+    <Dropdown.Item as={Button} onClick={handleLogout}>
       <FaSignOutAlt />
-    </Button>
-    // </OverlayTrigger>
+      <span className="pl-2">Logout</span>
+    </Dropdown.Item>
   );
 };
 
