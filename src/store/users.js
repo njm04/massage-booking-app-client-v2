@@ -63,6 +63,10 @@ const slice = createSlice({
     deleteAccountFailed: (users, action) => {
       users.loading = false;
     },
+    passwordChanged: (users, action) => {
+      users.loading = false;
+      toast.success("Your password has been changed successfully.");
+    },
   },
 });
 
@@ -79,6 +83,7 @@ const {
   accountDeleted,
   deleteAccountRequested,
   deleteAccountFailed,
+  passwordChanged,
 } = slice.actions;
 const url = "/users";
 export default slice.reducer;
@@ -137,6 +142,17 @@ export const deleteAccount = (accountId) => {
     method: "DELETE",
     onStart: deleteAccountRequested.type,
     onSuccess: accountDeleted.type,
+    onError: deleteAccountFailed.type,
+  });
+};
+
+export const changePassword = (accountId, data) => {
+  return apiCallBegan({
+    url: `${url}/change-password/${accountId}`,
+    method: "PUT",
+    data,
+    onStart: deleteAccountRequested.type,
+    onSuccess: passwordChanged.type,
     onError: deleteAccountFailed.type,
   });
 };
