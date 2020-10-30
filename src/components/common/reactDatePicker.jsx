@@ -4,7 +4,7 @@ import { setHours, setMinutes, addDays } from "date-fns";
 
 const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
   const [times, setTimes] = useState([]);
-
+  const [chosenDate, setChosenDate] = useState(new Date());
   const onCalendarOpen = () => {
     setTimes(
       schedules.map((schedule) => {
@@ -12,7 +12,21 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
         let hours = 0;
         const date = new Date(schedule.date);
         const currentDate = new Date();
+        /*
+        reserved time should not be disabled when users opened and 
+        closed the calendar multiple times without submitting 
+        appointment if the chosen date is not equal to the reserved 
+        date and current date
+         */
+        if (
+          new Date(chosenDate).getDate() !== date.getDate() &&
+          new Date(chosenDate).getDate() !== currentDate.getDate()
+        ) {
+          return null;
+        }
+
         if (currentDate.getDate() === date.getDate()) {
+          console.log("1");
           minutes = date.getMinutes();
           hours = date.getHours();
           return setHours(setMinutes(date, minutes), hours);
@@ -23,13 +37,13 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
   };
 
   // exclude times depending on chosenDate
-  const handleTimeChange = (chosenDate) => {
+  const handleTimeChange = (pickedDate) => {
     setTimes(
       schedules.map((schedule) => {
         let minutes = 0;
         let hours = 0;
         const date = new Date(schedule.date);
-        if (new Date(chosenDate).getDate() === date.getDate()) {
+        if (new Date(pickedDate).getDate() === date.getDate()) {
           minutes = date.getMinutes();
           hours = date.getHours();
           return setHours(setMinutes(date, minutes), hours);
@@ -48,6 +62,7 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
       onCalendarOpen={onCalendarOpen}
       onChange={(e) => {
         onChange(e);
+        setChosenDate(e);
         handleTimeChange(e);
       }}
       showTimeSelect
