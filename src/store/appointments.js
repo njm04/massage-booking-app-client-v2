@@ -165,12 +165,13 @@ export const getAppointments = createSelector(
           therapistId: appointment.therapist._id,
           therapistName: concatName(appointment.therapist),
           date: moment(appointment.date).format("MMMM D YYYY, h:mm A"),
+          createdBy: concatName(appointment.createdBy),
           status: appointment.status,
         };
       })
 );
 
-export const getCompletedAppointments = createSelector(
+export const getAppointmentsHistory = createSelector(
   (state) => state.entities.appointments,
   (appointments) =>
     appointments.list
@@ -191,6 +192,7 @@ export const getCompletedAppointments = createSelector(
           therapistId: appointment.therapist._id,
           therapistName: concatName(appointment.therapist),
           date: moment(appointment.date).format("MMMM D YYYY, h:mm A"),
+          createdBy: concatName(appointment.createdBy),
           status: appointment.status,
         };
       })

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   loadAppointments,
-  getCompletedAppointments,
+  getAppointmentsHistory,
   isLoading,
 } from "../store/appointments";
 import { Spinner, Badge } from "react-bootstrap";
@@ -10,7 +10,7 @@ import Table from "./common/table";
 
 const AppointmentsHistory = () => {
   const dispatch = useDispatch();
-  const appointments = useSelector(getCompletedAppointments);
+  const appointments = useSelector(getAppointmentsHistory);
   const loading = useSelector(isLoading);
 
   const columns = [
@@ -22,6 +22,7 @@ const AppointmentsHistory = () => {
     { label: "Contact number", path: "contactNumber" },
     { label: "Address", path: "address" },
     { label: "Date", path: "date" },
+    { label: "Created by", path: "createdBy" },
     {
       label: "Status",
       key: "status",
