@@ -25,7 +25,7 @@ import {
   handleChangeSchedules,
 } from "../utils/utils";
 import { massageDuration, massageTypes } from "../constants";
-import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
+import { appointmentsSchema } from "../validation/validationSchemas";
 import ReactDatePicker from "./common/reactDatePicker";
 import Input from "./common/input";
 import Error from "./common/error";
@@ -45,7 +45,7 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
     appointment.createdBy._id === user._id;
   const defaultValues = createDefaultValues(user, appointment);
   const { register, handleSubmit, watch, errors, control } = useForm({
-    resolver: yupResolver(appointmentFormSchema),
+    resolver: yupResolver(appointmentsSchema(user)),
     defaultValues,
   });
 

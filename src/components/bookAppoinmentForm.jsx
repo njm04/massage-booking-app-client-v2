@@ -4,13 +4,12 @@ import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
 import { Form, Col, Button, Card } from "react-bootstrap";
 import { Redirect } from "@reach/router";
-import _ from "lodash";
 // TODO: get states/provinces data from backend instead of json file
 import states from "../canadian-states.json";
 import { getUser } from "../store/auth";
 import { getTherapists, loadUsers } from "../store/users";
 import { addAppointment, isLoading } from "../store/appointments";
-import { appointmentFormSchema } from "../validation/appointmentsValidationSchema";
+import { appointmentsSchema } from "../validation/validationSchemas";
 import {
   concatName,
   getCities,
@@ -40,7 +39,7 @@ const BookAppointmentForm = () => {
     reset,
     formState: { isSubmitSuccessful },
   } = useForm({
-    resolver: yupResolver(appointmentFormSchema),
+    resolver: yupResolver(appointmentsSchema(user)),
     defaultValues,
   });
   // watch value of province field and dynamically get city based on that

@@ -1,25 +1,13 @@
 import React, { useEffect, useImperativeHandle, forwardRef } from "react";
-import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { Form, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { changePassword, isLoading } from "../store/users";
 import { getUser } from "../store/auth";
+import { changePasswordValidationSchema } from "../validation/validationSchemas";
 import Input from "./common/input";
 import Error from "./common/error";
-
-const changePasswordValidationSchema = yup.object({
-  password: yup.string().min(5).max(1000).required("Password is required"),
-  newPassword: yup
-    .string()
-    .min(5, "Your new password must be atleast 5 characters")
-    .max(1000, "Your new password is too long")
-    .required("Password is required"),
-  newPasswordConfirmation: yup
-    .string()
-    .oneOf([yup.ref("newPassword"), null], "Passwords must match"),
-});
 
 let ChangePasswordForm = ({}, ref) => {
   const dispatch = useDispatch();

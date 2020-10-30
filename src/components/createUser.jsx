@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "@reach/router";
 import BirthDatePicker from "./common/birthDatePicker";
-import { createUsersValidationSchema } from "../validation/usersValidationSchema";
+import { createUsersValidationSchema } from "../validation/validationSchemas";
 import { createAccount, isLoading } from "../store/users";
 import { loadUserTypes, getUserTypes } from "../store/userTypes";
 import { getUser } from "../store/auth";

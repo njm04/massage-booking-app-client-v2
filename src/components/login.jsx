@@ -8,23 +8,19 @@ import auth from "../services/authService";
 import http from "../services/httpService";
 import Input from "./common/input";
 import { authReceived } from "../store/auth";
-import { loginFormSchema } from "../validation/loginValidationSchema";
+import { loginValidationSchema } from "../validation/validationSchemas";
 
 const Login = () => {
   const { register, handleSubmit, errors } = useForm({
-    resolver: yupResolver(loginFormSchema),
+    resolver: yupResolver(loginValidationSchema),
   });
   const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
-    try {
-      await auth.login(data.email, data.password);
-      http.setJwt(auth.getJwt());
-      dispatch(authReceived(auth.getCurrentUser()));
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
+    await auth.login(data.email, data.password);
+    http.setJwt(auth.getJwt());
+    dispatch(authReceived(auth.getCurrentUser()));
+    navigate("/");
   };
 
   const onClick = () => {

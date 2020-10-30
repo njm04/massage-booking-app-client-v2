@@ -1,11 +1,10 @@
 import React, { useImperativeHandle, forwardRef } from "react";
 import moment from "moment";
-import { toast } from "react-toastify";
 import { Form, Card, Col } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
-import { editUsersValidationSchema } from "../validation/usersValidationSchema";
+import { editUsersValidationSchema } from "../validation/validationSchemas";
 import { isLoading, editAccount } from "../store/users";
 import Input from "./common/input";
 import Error from "./common/error";
