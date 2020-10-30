@@ -9,7 +9,7 @@ import { changePasswordValidationSchema } from "../validation/validationSchemas"
 import Input from "./common/input";
 import Error from "./common/error";
 
-let ChangePasswordForm = ({}, ref) => {
+let ChangePasswordForm = (props, ref) => {
   const dispatch = useDispatch();
   const user = useSelector(getUser);
   const loading = useSelector(isLoading);
@@ -30,7 +30,6 @@ let ChangePasswordForm = ({}, ref) => {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
     dispatch(changePassword(user._id, data));
   };
 
