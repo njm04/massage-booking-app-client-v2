@@ -24,22 +24,10 @@ const slice = createSlice({
       users.list = action.payload;
       users.loading = false;
     },
-    createAccountRequested: (users, action) => {
-      users.loading = true;
-    },
-    createAccountFailed: (users, action) => {
-      users.loading = false;
-    },
     accountCreated: (users, action) => {
       users.list.push(action.payload);
       users.loading = false;
       toastMessage(action.payload);
-    },
-    editAccountRequested: (users, action) => {
-      users.loading = true;
-    },
-    editAccountFailed: (users, action) => {
-      users.loading = false;
     },
     accountEdited: (users, action) => {
       const { _id: userId } = action.payload;
@@ -57,12 +45,6 @@ const slice = createSlice({
       const name = concatName(action.payload);
       toast.success(`${name}'s account has been deleted successfully.`);
     },
-    deleteAccountRequested: (users, action) => {
-      users.loading = true;
-    },
-    deleteAccountFailed: (users, action) => {
-      users.loading = false;
-    },
     passwordChanged: (users, action) => {
       users.loading = false;
       toast.success("Your password has been changed successfully.");
@@ -74,15 +56,9 @@ const {
   usersRequested,
   usersRequestFailed,
   usersReceived,
-  createAccountRequested,
-  createAccountFailed,
   accountCreated,
-  editAccountRequested,
-  editAccountFailed,
   accountEdited,
   accountDeleted,
-  deleteAccountRequested,
-  deleteAccountFailed,
   passwordChanged,
 } = slice.actions;
 const url = "/users";
@@ -106,9 +82,9 @@ export const registerUser = (account) => {
     url,
     method: "POST",
     data: account,
-    onStart: createAccountRequested.type,
+    onStart: usersRequested.type,
     onSuccess: accountCreated.type,
-    onError: createAccountFailed.type,
+    onError: usersRequestFailed.type,
   });
 };
 
@@ -118,9 +94,9 @@ export const createAccount = (account) => {
     url: `${url}/create-user`,
     method: "POST",
     data: account,
-    onStart: createAccountRequested.type,
+    onStart: usersRequested.type,
     onSuccess: accountCreated.type,
-    onError: createAccountFailed.type,
+    onError: usersRequestFailed.type,
   });
 };
 
@@ -130,9 +106,9 @@ export const editAccount = (accountId, account) => {
     url: `${url}/${accountId}`,
     method: "PUT",
     data: account,
-    onStart: editAccountRequested.type,
+    onStart: usersRequested.type,
     onSuccess: accountEdited.type,
-    onError: editAccountFailed.type,
+    onError: usersRequestFailed.type,
   });
 };
 
@@ -140,9 +116,9 @@ export const deleteAccount = (accountId) => {
   return apiCallBegan({
     url: `${url}/${accountId}`,
     method: "DELETE",
-    onStart: deleteAccountRequested.type,
+    onStart: usersRequested.type,
     onSuccess: accountDeleted.type,
-    onError: deleteAccountFailed.type,
+    onError: usersRequestFailed.type,
   });
 };
 
@@ -151,9 +127,9 @@ export const changePassword = (accountId, data) => {
     url: `${url}/change-password/${accountId}`,
     method: "PUT",
     data,
-    onStart: deleteAccountRequested.type,
+    onStart: usersRequested.type,
     onSuccess: passwordChanged.type,
-    onError: deleteAccountFailed.type,
+    onError: usersRequestFailed.type,
   });
 };
 

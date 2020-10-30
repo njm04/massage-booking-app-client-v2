@@ -28,12 +28,6 @@ const slice = createSlice({
       appointments.loading = false;
       toast.success("Appointment has been submitted successfully");
     },
-    appointmentAddRequested: (appointments, action) => {
-      appointments.loading = true;
-    },
-    appointmentAddFailed: (appointments, action) => {
-      appointments.loading = false;
-    },
     appointmentEdited: (appointments, action) => {
       const { _id: appointmentId } = action.payload;
       const index = appointments.list.findIndex(
@@ -43,22 +37,10 @@ const slice = createSlice({
       appointments.loading = false;
       toast.success("Appointment has been updated successfully");
     },
-    appointmentEditRequested: (appointments, action) => {
-      appointments.loading = true;
-    },
-    appointmentEditFailed: (appointments, action) => {
-      appointments.loading = false;
-    },
     appointmentDeleted: (appointments, action) => {
       appointments.list.filter((appointment) => !appointment.isDeleted);
       appointments.loading = false;
       toast.success("Appointment has been deleted successfully");
-    },
-    deleteAppointmentRequested: (appointments, action) => {
-      appointments.loading = true;
-    },
-    deleteAppointmentFailed: (appointments, action) => {
-      appointments.loading = false;
     },
   },
 });
@@ -70,12 +52,6 @@ const {
   appointmentAdded,
   appointmentEdited,
   appointmentDeleted,
-  appointmentAddRequested,
-  appointmentAddFailed,
-  appointmentEditRequested,
-  appointmentEditFailed,
-  deleteAppointmentRequested,
-  deleteAppointmentFailed,
 } = slice.actions;
 export default slice.reducer;
 const url = "/bookings";
@@ -97,9 +73,9 @@ export const addAppointment = (appointment) => {
     url,
     method: "POST",
     data: appointment,
-    onStart: appointmentAddRequested.type,
+    onStart: appointmentsRequested.type,
     onSuccess: appointmentAdded.type,
-    onError: appointmentAddFailed.type,
+    onError: appointmentsRequestFailed.type,
   });
 };
 
@@ -109,9 +85,9 @@ export const editAppointment = (appointmentId, appointment) => {
     url: `${url}/${appointmentId}`,
     method: "PUT",
     data: appointment,
-    onStart: appointmentEditRequested.type,
+    onStart: appointmentsRequested.type,
     onSuccess: appointmentEdited.type,
-    onError: appointmentEditFailed.type,
+    onError: appointmentsRequestFailed.type,
   });
 };
 
@@ -120,9 +96,9 @@ export const updateAppointmentStatus = (appointmentId, data) => {
     url: `${url}/update-status/${appointmentId}`,
     method: "PUT",
     data,
-    onStart: appointmentEditRequested.type,
+    onStart: appointmentsRequested.type,
     onSuccess: appointmentEdited.type,
-    onError: appointmentEditFailed.type,
+    onError: appointmentsRequestFailed.type,
   });
 };
 
@@ -130,9 +106,9 @@ export const deleteAppointment = (appointmentId) => {
   return apiCallBegan({
     url: `${url}/delete/${appointmentId}`,
     method: "PUT",
-    onStart: deleteAppointmentRequested.type,
+    onStart: appointmentsRequested.type,
     onSuccess: appointmentDeleted.type,
-    onError: deleteAppointmentFailed.type,
+    onError: appointmentsRequestFailed.type,
   });
 };
 
