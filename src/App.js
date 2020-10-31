@@ -12,6 +12,7 @@ import Dashboard from "./components/dashboard";
 import Registration from "./components/registration";
 import CreateUser from "./components/createUser";
 import UsersTable from "./components/usersTable";
+import EmailConfirmed from "./components/emailConfirmed";
 import PageNotFound from "./components/pageNotFound";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -24,6 +25,7 @@ function App() {
       <Router>
         <Login path="/login" />
         <Registration path="/registration" />
+        <EmailConfirmed path="/confirmed" />
         <PrivateRoute as={Dashboard} path="/">
           <PrivateRoute as={AppointmentsTabs} path="/" />
           <PrivateRoute as={BookAppointmentForm} path="/book-appointment" />
