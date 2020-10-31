@@ -7,6 +7,7 @@ import Logout from "../common/logout";
 import NavLink from "./navLink";
 import ChangePasswordButton from "../changePasswordButton";
 import ChangePasswordModal from "../changePasswordModal";
+import logo from "../../images/navbar_logo.png";
 
 const NavBar = () => {
   const user = useSelector(getUser);
@@ -16,7 +17,13 @@ const NavBar = () => {
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg" className="mx-auto">
-        <Navbar.Brand href="/">Massage Clinic</Navbar.Brand>
+        <Navbar.Brand href="/">
+          <img
+            src={logo}
+            alt="Business logo"
+            className="d-inline-block align-top"
+          />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
