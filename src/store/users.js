@@ -27,7 +27,7 @@ const slice = createSlice({
     accountCreated: (users, action) => {
       users.list.push(action.payload);
       users.loading = false;
-      toastMessage(action.payload);
+      toastMessage(action.payload, "accountCreated");
     },
     accountEdited: (users, action) => {
       const { _id: userId } = action.payload;

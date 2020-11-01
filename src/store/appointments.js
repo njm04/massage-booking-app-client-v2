@@ -4,7 +4,7 @@ import { apiCallBegan } from "./api";
 import { toast } from "react-toastify";
 import moment from "moment";
 import memoize from "lodash.memoize";
-import { concatName, concatAddress } from "../utils/utils";
+import { concatName, concatAddress, toastMessage } from "../utils/utils";
 
 const slice = createSlice({
   name: "appointments",
@@ -40,7 +40,7 @@ const slice = createSlice({
     appointmentDeleted: (appointments, action) => {
       appointments.list.filter((appointment) => !appointment.isDeleted);
       appointments.loading = false;
-      toast.success("Appointment has been deleted successfully");
+      toastMessage(action.payload.createdBy, "appointmentDeleted");
     },
   },
 });
