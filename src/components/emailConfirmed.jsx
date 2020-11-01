@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 
 const EmailConfirmed = () => {
   return (
-    <div className="container email-confirmed">
+    <div className="container">
       <div className="row">
         <div className="col-md-12">
           <div className="error-template">
