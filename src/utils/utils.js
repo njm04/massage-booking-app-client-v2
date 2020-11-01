@@ -16,10 +16,12 @@ export const concatAddress = (obj) => {
 
 export const toastMessage = (obj) => {
   if (obj.userType.name === "customer") {
-    toast.success("Account successfully created. Redirecting to login page");
+    toast.success(
+      "Account successfully created. A verification message has been sent to your email address"
+    );
   } else {
     toast.success(
-      `${obj.userType.name.toUpperCase()} account successfully created.`
+      `${obj.userType.name.toUpperCase()} account successfully created. A verification message has been sent to their email address`
     );
   }
 };

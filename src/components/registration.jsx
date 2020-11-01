@@ -49,7 +49,6 @@ const Registration = () => {
     ]);
     try {
       dispatch(registerUser(account));
-      setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
       console.log(error);
     }
@@ -159,7 +158,7 @@ const Registration = () => {
                     onClick={() => navigate("/login")}
                   >
                     {loading ? <Spinner /> : null}
-                    <span>Back</span>
+                    <span>Back to login</span>
                   </Button>
                   <Button variant="primary" type="submit">
                     {loading ? <Spinner /> : null}
