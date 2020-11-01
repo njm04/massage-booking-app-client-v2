@@ -4,7 +4,6 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { useDispatch, useSelector } from "react-redux";
 import { navigate } from "@reach/router";
-import _ from "lodash";
 import BirthDatePicker from "./common/birthDatePicker";
 import { registrationValiditionSchema } from "../validation/validationSchemas";
 import { registerUser, isLoading } from "../store/users";
