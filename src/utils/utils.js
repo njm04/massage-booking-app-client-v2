@@ -14,15 +14,28 @@ export const concatAddress = (obj) => {
   return `${addressTwo}${obj.address}, ${obj.city}, ${obj.state}, ${obj.zip}`;
 };
 
-export const toastMessage = (obj) => {
-  if (obj.userType.name === "customer") {
-    toast.success(
-      "Account successfully created. A verification message has been sent to your email address"
-    );
-  } else {
-    toast.success(
-      `${obj.userType.name.toUpperCase()} account successfully created. A verification message has been sent to their email address`
-    );
+export const toastMessage = (obj, action) => {
+  if (action === "accountCreated") {
+    if (
+      obj.userType.name === "customer" &&
+      obj.createdBy.userType.name === "customer"
+    ) {
+      toast.success(
+        "Account successfully created. A verification message has been sent to your email address"
+      );
+    } else {
+      toast.success(
+        `${obj.userType.name.toUpperCase()} account successfully created.`
+      );
+    }
+  }
+
+  if (action === "appointmentDeleted") {
+    if (obj.userType.name === "customer") {
+      toast.success("Appointment has been cancelled");
+    } else {
+      toast.success("Appointment has been deleted successfully");
+    }
   }
 };
 
