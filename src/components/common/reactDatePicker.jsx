@@ -26,7 +26,6 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
         }
 
         if (currentDate.getDate() === date.getDate()) {
-          console.log("1");
           minutes = date.getMinutes();
           hours = date.getHours();
           return setHours(setMinutes(date, minutes), hours);
@@ -60,6 +59,7 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
       selected={value}
       placeholderText="Select date"
       onCalendarOpen={onCalendarOpen}
+      onChangeRaw={(e) => e.preventDefault()}
       onChange={(e) => {
         onChange(e);
         setChosenDate(e);

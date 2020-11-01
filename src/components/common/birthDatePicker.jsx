@@ -7,6 +7,7 @@ const BirthDatePicker = ({ value, onChange }) => {
       className="form-control"
       placeholderText="Select birthdate"
       selected={value}
+      onChangeRaw={(e) => e.preventDefault()}
       onChange={(e) => {
         onChange(e);
       }}
