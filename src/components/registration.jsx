@@ -37,21 +37,7 @@ const Registration = () => {
 
   const onSubmit = (data) => {
     if (!data.userType) data.userType = null;
-
-    const account = _.pick(data, [
-      "email",
-      "password",
-      "firstName",
-      "lastName",
-      "birthDate",
-      "gender",
-      "userType",
-    ]);
-    try {
-      dispatch(registerUser(account));
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(registerUser(data));
   };
 
   useEffect(() => {
