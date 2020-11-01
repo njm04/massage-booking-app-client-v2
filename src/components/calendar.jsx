@@ -8,6 +8,14 @@ import { Redirect } from "@reach/router";
 
 const localizer = momentLocalizer(moment);
 
+const createTitle = (user, therapist, reservation) => {
+  if (user && user.userType && user.userType.name === "therapist") {
+    return `Client: ${reservation.name}`;
+  } else {
+    return `${therapist.firstName} ${therapist.lastName}`;
+  }
+};
+
 const SchedulesCalendar = () => {
   const dispatch = useDispatch();
   const therapists = useSelector(getTherapistsCalendarSchedules);
@@ -18,7 +26,7 @@ const SchedulesCalendar = () => {
         .map((therapist) => {
           if (therapist.reservations) {
             return therapist.reservations.map((reservation) => {
-              const title = `${therapist.firstName} ${therapist.lastName}`;
+              const title = createTitle(user, therapist, reservation);
               const start = new Date(reservation.date);
               const end = moment(new Date(reservation.date))
                 .add(reservation.duration, "m")
