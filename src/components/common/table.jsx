@@ -7,7 +7,7 @@ const Table = (props) => {
   const { columns, data } = props;
 
   return (
-    <BootstrapTable striped bordered hover>
+    <BootstrapTable striped bordered hover responsive>
       <TableHeader columns={columns} />
       <TableBody columns={columns} data={data} />
     </BootstrapTable>
