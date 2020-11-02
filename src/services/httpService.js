@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-axios.defaults.baseURL = "http://localhost:5000/api";
+axios.defaults.baseURL = process.env.REACT_APP_MASSAGE_BOOKING_API_URL;
 
 axios.interceptors.response.use(null, (error) => {
   const expectedError =

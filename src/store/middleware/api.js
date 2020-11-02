@@ -1,6 +1,8 @@
 import axios from "axios";
 import * as actions from "../api";
 
+const baseUrl = process.env.REACT_APP_MASSAGE_BOOKING_API_URL;
+
 const api = ({ dispatch }) => (next) => async (action) => {
   if (action.type !== actions.apiCallBegan.type) return next(action);
 
@@ -11,7 +13,7 @@ const api = ({ dispatch }) => (next) => async (action) => {
 
   try {
     const response = await axios.request({
-      baseURL: "http://localhost:5000/api",
+      baseUrl,
       url,
       method,
       data,
