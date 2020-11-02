@@ -65,7 +65,6 @@ const UsersTable = () => {
   ];
 
   useEffect(() => {
-    console.log("all users");
     dispatch(loadUsers());
   }, [dispatch]);
 
