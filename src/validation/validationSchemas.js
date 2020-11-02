@@ -49,6 +49,7 @@ export const createUsersValidationSchema = yup.object().shape({
   firstName: yup.string().required("First name is a required field"),
   lastName: yup.string().required("Last name is a required field"),
   gender: yup.string().required("Gender is a required field"),
+  status: yup.string().required("Status is a required field"),
   birthDate: yup.date().required("Birthday is a required field").nullable(),
   userType: yup.string().required("User type is a required field"),
 });
@@ -61,6 +62,7 @@ export const editUsersValidationSchema = yup.object().shape({
   firstName: yup.string().required("First name is a required field"),
   lastName: yup.string().required("Last name is a required field"),
   gender: yup.string().required("Gender is a required field"),
+  status: yup.string().required("Status is a required field"),
   birthDate: yup.date().required("Birthday is a required field").nullable(),
 });
 

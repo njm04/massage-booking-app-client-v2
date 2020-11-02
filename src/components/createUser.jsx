@@ -155,8 +155,8 @@ const CreateUser = () => {
                         <option value="active">Active</option>
                         <option value="suspend">Suspend</option>
                       </Form.Control>
-                      {errors.gender && (
-                        <Error message={errors.gender.message} />
+                      {errors.status && (
+                        <Error message={errors.status.message} />
                       )}
                     </Form.Group>
                   </Form.Row>
