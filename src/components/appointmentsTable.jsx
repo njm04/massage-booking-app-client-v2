@@ -39,7 +39,6 @@ const AppointmentsTable = () => {
   useEffect(() => {
     dispatch(loadAppointments());
     dispatch(loadUsers());
-    console.log("i fire once");
   }, [dispatch, appointmentDeleteId]);
 
   return (

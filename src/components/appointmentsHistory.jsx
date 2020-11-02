@@ -42,7 +42,6 @@ const AppointmentsHistory = () => {
 
   useEffect(() => {
     dispatch(loadAppointments());
-    console.log("i fire once");
   }, [dispatch]);
 
   return (

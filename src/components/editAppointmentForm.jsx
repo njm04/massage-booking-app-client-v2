@@ -57,10 +57,8 @@ let EditAppointmentForm = ({ appointmentId, therapists }, ref) => {
 
   useEffect(() => {
     dispatch(loadUsers());
-    console.log("fired");
   }, [dispatch]);
 
-  // TODO: make submit functional
   const onSubmit = (data) => {
     const payload = _.pick(data, [
       "firstName",
