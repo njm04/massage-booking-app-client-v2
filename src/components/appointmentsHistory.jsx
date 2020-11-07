@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   loadAppointments,
@@ -7,11 +7,17 @@ import {
 } from "../store/appointments";
 import { Spinner, Badge } from "react-bootstrap";
 import Table from "./common/table";
+import SearchBox from "./common/searchBox";
+import Pagination from "./common/pagination";
+import { paginate } from "../utils/paginate";
 
 const AppointmentsHistory = () => {
   const dispatch = useDispatch();
   const appointments = useSelector(getAppointmentsHistory);
   const loading = useSelector(isLoading);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10);
 
   const columns = [
     { label: "Name", path: "name" },
@@ -40,12 +46,42 @@ const AppointmentsHistory = () => {
     },
   ];
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const getPageData = () => {
+    let filtered = [];
+    if (searchQuery) {
+      filtered = appointments.filter(
+        (appointment) =>
+          appointment.name.toLowerCase().indexOf(searchQuery) !== -1 ||
+          appointment.therapistName.toLowerCase().indexOf(searchQuery) !== -1 ||
+          appointment.status.toLowerCase().indexOf(searchQuery) !== -1
+      );
+    } else {
+      filtered = appointments;
+    }
+    const paginatedAppointments = paginate(filtered, currentPage, pageSize);
+
+    return { totalCount: filtered.length, data: paginatedAppointments };
+  };
+
   useEffect(() => {
     dispatch(loadAppointments());
   }, [dispatch]);
 
   return (
     <>
+      <SearchBox
+        value={searchQuery}
+        onChange={handleSearch}
+        placeholder="Search (customer, therapist, status)"
+      />
       {loading ? (
         <div>
           <Table columns={columns} />
@@ -53,8 +89,14 @@ const AppointmentsHistory = () => {
           <h2>Loading...</h2>
         </div>
       ) : (
-        <Table columns={columns} data={appointments} />
+        <Table columns={columns} data={getPageData().data} />
       )}
+      <Pagination
+        itemsCount={getPageData().totalCount}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 };
