@@ -27,7 +27,7 @@ const AppointmentsTable = () => {
   const [appointmentDeleteId, setAppointmentDeleteId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize] = useState(4);
+  const [pageSize] = useState(10);
 
   // data came from tableBody and passed to content() then to handleShow
   const handleShow = (id) => {
@@ -54,7 +54,8 @@ const AppointmentsTable = () => {
       filtered = appointments.filter(
         (appointment) =>
           appointment.name.toLowerCase().indexOf(searchQuery) !== -1 ||
-          appointment.therapistName.toLowerCase().indexOf(searchQuery) !== -1
+          appointment.therapistName.toLowerCase().indexOf(searchQuery) !== -1 ||
+          appointment.status.toLowerCase().indexOf(searchQuery) !== -1
       );
     } else {
       filtered = appointments;
@@ -76,7 +77,7 @@ const AppointmentsTable = () => {
       <SearchBox
         value={searchQuery}
         onChange={handleSearch}
-        placeholder="Search (Customer or therapist name)"
+        placeholder="Search (customer, therapist, status)"
       />
       {loading ? (
         <div>
