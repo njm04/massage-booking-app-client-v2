@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Button, Badge } from "react-bootstrap";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import states from "../canadian-states.json";
+import Tooltip from "../components/common/tooltip";
 
 export const concatName = (item) => {
   return `${item.firstName} ${item.lastName}`;
@@ -196,27 +197,47 @@ export const createColumns = (user, handleShow = null, handleDelete = null) => {
         },
         {
           key: "edit",
-          content: (item) => (
-            <Button
-              variant="outline-info"
-              onClick={() => handleShow(item.id)}
-              disabled={checkStatus(item)}
-            >
-              <FaEdit />
-            </Button>
-          ),
+          content: (item) => {
+            if (checkStatus(item))
+              return (
+                <Tooltip
+                  variant="outline-info"
+                  message="can't update because session is ongoing"
+                  icon={FaEdit}
+                  component={Button}
+                />
+              );
+            return (
+              <Button
+                variant="outline-info"
+                onClick={() => handleShow(item.id)}
+              >
+                <FaEdit />
+              </Button>
+            );
+          },
         },
         {
           key: "delete",
-          content: (item) => (
-            <Button
-              variant="outline-danger"
-              onClick={() => handleDelete(item.id)}
-              disabled={checkStatus(item)}
-            >
-              <FaTrashAlt />
-            </Button>
-          ),
+          content: (item) => {
+            if (checkStatus(item))
+              return (
+                <Tooltip
+                  variant="outline-danger"
+                  message="can't delete because session is ongoing"
+                  icon={FaTrashAlt}
+                  component={Button}
+                />
+              );
+            return (
+              <Button
+                variant="outline-danger"
+                onClick={() => handleDelete(item.id)}
+              >
+                <FaTrashAlt />
+              </Button>
+            );
+          },
         },
       ];
     } else {
@@ -247,27 +268,47 @@ export const createColumns = (user, handleShow = null, handleDelete = null) => {
         },
         {
           key: "edit",
-          content: (item) => (
-            <Button
-              variant="outline-info"
-              onClick={() => handleShow(item.id)}
-              disabled={checkStatus(item)}
-            >
-              <FaEdit />
-            </Button>
-          ),
+          content: (item) => {
+            if (checkStatus(item))
+              return (
+                <Tooltip
+                  variant="outline-info"
+                  message="can't update because session is ongoing"
+                  icon={FaEdit}
+                  component={Button}
+                />
+              );
+            return (
+              <Button
+                variant="outline-info"
+                onClick={() => handleShow(item.id)}
+              >
+                <FaEdit />
+              </Button>
+            );
+          },
         },
         {
           key: "delete",
-          content: (item) => (
-            <Button
-              variant="outline-danger"
-              onClick={() => handleDelete(item.id)}
-              disabled={checkStatus(item)}
-            >
-              <FaTrashAlt />
-            </Button>
-          ),
+          content: (item) => {
+            if (checkStatus(item))
+              return (
+                <Tooltip
+                  variant="outline-danger"
+                  message="can't delete because session is ongoing"
+                  icon={FaTrashAlt}
+                  component={Button}
+                />
+              );
+            return (
+              <Button
+                variant="outline-danger"
+                onClick={() => handleDelete(item.id)}
+              >
+                <FaTrashAlt />
+              </Button>
+            );
+          },
         },
       ];
     }
