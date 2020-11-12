@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "@reach/router";
+import _ from "lodash";
 import {
   getAllUsers,
   loadUsers,
@@ -27,6 +28,7 @@ const UsersTable = () => {
   const [user, setUser] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortColumn, setSortColumn] = useState({ path: "name", order: "asc" });
   const [pageSize] = useState(10);
 
   const handleShow = (id) => {
@@ -36,6 +38,10 @@ const UsersTable = () => {
 
   const handleDelete = (id) => {
     dispatch(deleteAccount(id));
+  };
+
+  const handleSort = (sortColumn) => {
+    setSortColumn(sortColumn);
   };
 
   const columns = [
@@ -90,7 +96,10 @@ const UsersTable = () => {
     } else {
       filtered = users;
     }
-    const paginatedUsers = paginate(filtered, currentPage, pageSize);
+
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+    const paginatedUsers = paginate(sorted, currentPage, pageSize);
 
     return { totalCount: filtered.length, data: paginatedUsers };
   };
@@ -107,6 +116,8 @@ const UsersTable = () => {
       return <Redirect to="/" noThrow />;
   }
 
+  const { totalCount, data: allUsers } = getPageData();
+
   return (
     <>
       <SearchBox
@@ -121,10 +132,15 @@ const UsersTable = () => {
           <h2>Loading...</h2>
         </div>
       ) : (
-        <Table columns={columns} data={getPageData().data} />
+        <Table
+          columns={columns}
+          data={allUsers}
+          onSort={handleSort}
+          sortColumn={sortColumn}
+        />
       )}
       <Pagination
-        itemsCount={getPageData().totalCount}
+        itemsCount={totalCount}
         pageSize={pageSize}
         currentPage={currentPage}
         onPageChange={handlePageChange}

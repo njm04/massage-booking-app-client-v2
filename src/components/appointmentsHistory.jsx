@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 import {
   loadAppointments,
   getAppointmentsHistory,
@@ -17,6 +18,7 @@ const AppointmentsHistory = () => {
   const loading = useSelector(isLoading);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortColumn, setSortColumn] = useState({ path: "name", order: "asc" });
   const [pageSize] = useState(10);
 
   const columns = [
@@ -54,6 +56,10 @@ const AppointmentsHistory = () => {
     setCurrentPage(page);
   };
 
+  const handleSort = (sortColumn) => {
+    setSortColumn(sortColumn);
+  };
+
   const getPageData = () => {
     let filtered = [];
     if (searchQuery) {
@@ -66,7 +72,10 @@ const AppointmentsHistory = () => {
     } else {
       filtered = appointments;
     }
-    const paginatedAppointments = paginate(filtered, currentPage, pageSize);
+
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+    const paginatedAppointments = paginate(sorted, currentPage, pageSize);
 
     return { totalCount: filtered.length, data: paginatedAppointments };
   };
@@ -74,6 +83,8 @@ const AppointmentsHistory = () => {
   useEffect(() => {
     dispatch(loadAppointments());
   }, [dispatch]);
+
+  const { totalCount, data: allAppointments } = getPageData();
 
   return (
     <>
@@ -89,10 +100,15 @@ const AppointmentsHistory = () => {
           <h2>Loading...</h2>
         </div>
       ) : (
-        <Table columns={columns} data={getPageData().data} />
+        <Table
+          columns={columns}
+          data={allAppointments}
+          onSort={handleSort}
+          sortColumn={sortColumn}
+        />
       )}
       <Pagination
-        itemsCount={getPageData().totalCount}
+        itemsCount={totalCount}
         pageSize={pageSize}
         currentPage={currentPage}
         onPageChange={handlePageChange}

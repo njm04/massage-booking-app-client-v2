@@ -4,11 +4,11 @@ import TableHeader from "./tableHeader";
 import TableBody from "./tableBody";
 
 const Table = (props) => {
-  const { columns, data } = props;
+  const { columns, data, onSort, sortColumn } = props;
 
   return (
     <BootstrapTable striped bordered hover responsive>
-      <TableHeader columns={columns} />
+      <TableHeader columns={columns} sortColumn={sortColumn} onSort={onSort} />
       <TableBody columns={columns} data={data} />
     </BootstrapTable>
   );

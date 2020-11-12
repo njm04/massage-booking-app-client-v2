@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
 import {
   loadAppointments,
   getAppointments,
@@ -27,6 +28,7 @@ const AppointmentsTable = () => {
   const [appointmentDeleteId, setAppointmentDeleteId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortColumn, setSortColumn] = useState({ path: "name", order: "asc" });
   const [pageSize] = useState(10);
 
   // data came from tableBody and passed to content() then to handleShow
@@ -48,6 +50,10 @@ const AppointmentsTable = () => {
     setCurrentPage(page);
   };
 
+  const handleSort = (sortColumn) => {
+    setSortColumn(sortColumn);
+  };
+
   const getPageData = () => {
     let filtered = [];
     if (searchQuery) {
@@ -60,7 +66,10 @@ const AppointmentsTable = () => {
     } else {
       filtered = appointments;
     }
-    const paginatedAppointments = paginate(filtered, currentPage, pageSize);
+
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+    const paginatedAppointments = paginate(sorted, currentPage, pageSize);
 
     return { totalCount: filtered.length, data: paginatedAppointments };
   };
@@ -71,6 +80,8 @@ const AppointmentsTable = () => {
     dispatch(loadAppointments());
     dispatch(loadUsers());
   }, [dispatch, appointmentDeleteId]);
+
+  const { totalCount, data: allAppointments } = getPageData();
 
   return (
     <>
@@ -86,10 +97,15 @@ const AppointmentsTable = () => {
           <h2>Loading...</h2>
         </div>
       ) : (
-        <Table columns={columns} data={getPageData().data} />
+        <Table
+          columns={columns}
+          data={allAppointments}
+          onSort={handleSort}
+          sortColumn={sortColumn}
+        />
       )}
       <Pagination
-        itemsCount={getPageData().totalCount}
+        itemsCount={totalCount}
         pageSize={pageSize}
         currentPage={currentPage}
         onPageChange={handlePageChange}
