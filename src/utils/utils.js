@@ -197,7 +197,11 @@ export const createColumns = (user, handleShow = null, handleDelete = null) => {
         {
           key: "edit",
           content: (item) => (
-            <Button variant="outline-info" onClick={() => handleShow(item.id)}>
+            <Button
+              variant="outline-info"
+              onClick={() => handleShow(item.id)}
+              disabled={checkStatus(item)}
+            >
               <FaEdit />
             </Button>
           ),
@@ -208,6 +212,7 @@ export const createColumns = (user, handleShow = null, handleDelete = null) => {
             <Button
               variant="outline-danger"
               onClick={() => handleDelete(item.id)}
+              disabled={checkStatus(item)}
             >
               <FaTrashAlt />
             </Button>
@@ -243,7 +248,11 @@ export const createColumns = (user, handleShow = null, handleDelete = null) => {
         {
           key: "edit",
           content: (item) => (
-            <Button variant="outline-info" onClick={() => handleShow(item.id)}>
+            <Button
+              variant="outline-info"
+              onClick={() => handleShow(item.id)}
+              disabled={checkStatus(item)}
+            >
               <FaEdit />
             </Button>
           ),
@@ -254,6 +263,7 @@ export const createColumns = (user, handleShow = null, handleDelete = null) => {
             <Button
               variant="outline-danger"
               onClick={() => handleDelete(item.id)}
+              disabled={checkStatus(item)}
             >
               <FaTrashAlt />
             </Button>
@@ -264,4 +274,9 @@ export const createColumns = (user, handleShow = null, handleDelete = null) => {
   } else {
     return [];
   }
+};
+
+const checkStatus = (item) => {
+  if (item.status === "ongoing") return true;
+  return false;
 };
