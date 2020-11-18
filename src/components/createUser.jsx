@@ -27,7 +27,7 @@ const CreateUser = () => {
     firstName: "",
     lastName: "",
     userType: "",
-    status: "unverified",
+    status: "",
   };
   const {
     register,
@@ -36,6 +36,7 @@ const CreateUser = () => {
     control,
     reset,
     formState: { isSubmitSuccessful },
+    setValue,
   } = useForm({
     defaultValues,
     resolver: yupResolver(createUsersValidationSchema),
@@ -46,9 +47,17 @@ const CreateUser = () => {
     setUserType(type.name);
   };
 
+  const handleUserTypeClick = (userTypeId) => {
+    const type = userTypes.find((userType) => userType._id === userTypeId);
+
+    if (type && type.name && type.name === "customer")
+      setValue("status", "unverified");
+  };
+
   const onSubmit = (account) => {
     if (!account.userType) account.userType = null;
     dispatch(createAccount(account));
+    setUserType("");
   };
 
   useEffect(() => {
@@ -105,6 +114,7 @@ const CreateUser = () => {
                         name="userType"
                         defaultValue=""
                         ref={register}
+                        onClick={(e) => handleUserTypeClick(e.target.value)}
                         onChange={(e) =>
                           handleUserTypeChange(e.currentTarget.value)
                         }
@@ -171,10 +181,10 @@ const CreateUser = () => {
                         <Form.Control
                           as="select"
                           name="status"
-                          defaultValue="unverified"
+                          defaultValue=""
                           ref={register}
                         >
-                          <option value="unverified" disabled>
+                          <option value="" disabled>
                             Select status
                           </option>
                           <option value="active">Active</option>
