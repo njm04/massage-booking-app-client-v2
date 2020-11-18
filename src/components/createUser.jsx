@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button, Card, Col } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
@@ -18,6 +18,7 @@ const CreateUser = () => {
   const userTypes = useSelector(getUserTypes);
   const loading = useSelector(isLoading);
   const user = useSelector(getUser);
+  const [userType, setUserType] = useState("");
   const defaultValues = {
     birthDate: null,
     gender: "",
@@ -26,7 +27,7 @@ const CreateUser = () => {
     firstName: "",
     lastName: "",
     userType: "",
-    status: "active",
+    status: "unverified",
   };
   const {
     register,
@@ -39,6 +40,11 @@ const CreateUser = () => {
     defaultValues,
     resolver: yupResolver(createUsersValidationSchema),
   });
+
+  const handleUserTypeChange = (userTypeId) => {
+    const type = userTypes.find((userType) => userType._id === userTypeId);
+    setUserType(type.name);
+  };
 
   const onSubmit = (account) => {
     if (!account.userType) account.userType = null;
@@ -99,6 +105,9 @@ const CreateUser = () => {
                         name="userType"
                         defaultValue=""
                         ref={register}
+                        onChange={(e) =>
+                          handleUserTypeChange(e.currentTarget.value)
+                        }
                       >
                         <option value="" disabled>
                           Select user type
@@ -151,10 +160,28 @@ const CreateUser = () => {
 
                     <Form.Group as={Col} controlId="status">
                       <Form.Label>Status</Form.Label>
-                      <Form.Control as="select" name="status" ref={register}>
-                        <option value="active">Active</option>
-                        <option value="suspend">Suspend</option>
-                      </Form.Control>
+                      {userType === "customer" ? (
+                        <Form.Control
+                          as="input"
+                          name="status"
+                          ref={register}
+                          readOnly
+                        />
+                      ) : (
+                        <Form.Control
+                          as="select"
+                          name="status"
+                          defaultValue="unverified"
+                          ref={register}
+                        >
+                          <option value="unverified" disabled>
+                            Select status
+                          </option>
+                          <option value="active">Active</option>
+                          <option value="suspend">Suspend</option>
+                        </Form.Control>
+                      )}
+
                       {errors.status && (
                         <Error message={errors.status.message} />
                       )}
