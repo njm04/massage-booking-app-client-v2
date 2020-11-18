@@ -17,6 +17,7 @@ import Table from "./common/table";
 import EditUserModal from "./editUserModal";
 import SearchBox from "./common/searchBox";
 import Pagination from "./common/pagination";
+import Tooltip from "./common/tooltip";
 
 const UsersTable = () => {
   const dispatch = useDispatch();
@@ -69,11 +70,23 @@ const UsersTable = () => {
     },
     {
       key: "edit",
-      content: (item) => (
-        <Button variant="outline-info" onClick={() => handleShow(item.id)}>
-          <FaEdit />
-        </Button>
-      ),
+      content: (item) => {
+        console.log(item);
+        if (item.status === "unverified")
+          return (
+            <Tooltip
+              variant="outline-info"
+              message="can't update unverified account"
+              icon={FaEdit}
+              component={Button}
+            />
+          );
+        return (
+          <Button variant="outline-info" onClick={() => handleShow(item.id)}>
+            <FaEdit />
+          </Button>
+        );
+      },
     },
     {
       key: "delete",
