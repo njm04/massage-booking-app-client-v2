@@ -54,8 +54,17 @@ const UsersTable = () => {
       label: "Status",
       key: "status",
       content: (item) => {
-        const variant = item.status === "active" ? "success" : "danger";
-        return <Badge variant={variant}>{item.status}</Badge>;
+        const variant =
+          item.status === "active"
+            ? "success"
+            : item.status === "suspend"
+            ? "danger"
+            : "dark";
+        return (
+          <Badge variant={variant}>
+            {item.status === "suspend" ? "suspended" : item.status}
+          </Badge>
+        );
       },
     },
     {
