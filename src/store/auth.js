@@ -27,6 +27,7 @@ const slice = createSlice({
     authReceived: (auth, action) => {
       auth.user = action.payload;
       auth.isAuthenticated = !isEmpty(action.payload);
+      auth.loading = false;
     },
     userLoggedOut: (auth, action) => {
       auth.user = action.payload;
