@@ -71,7 +71,6 @@ const UsersTable = () => {
     {
       key: "edit",
       content: (item) => {
-        console.log(item);
         if (item.status === "unverified")
           return (
             <Tooltip
