@@ -8,10 +8,11 @@ import {
   getUserById,
   deleteAccount,
   isLoading,
+  updateStatus,
 } from "../store/users";
 import { getUser } from "../store/auth";
 import { paginate } from "../utils/paginate";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import { FaTrashAlt, FaEdit, FaToggleOn, FaToggleOff } from "react-icons/fa";
 import { Button, Spinner, Badge } from "react-bootstrap";
 import Table from "./common/table";
 import EditUserModal from "./editUserModal";
@@ -45,6 +46,16 @@ const UsersTable = () => {
     setSortColumn(sortColumn);
   };
 
+  const handleStatusClick = (item) => {
+    if (item.status === "active") {
+      item.status = "suspend";
+      dispatch(updateStatus(item.id, { status: "suspend" }));
+    } else {
+      item.status = "active";
+      dispatch(updateStatus(item.id, { status: "active" }));
+    }
+  };
+
   const columns = [
     { label: "Name", path: "name" },
     { label: "User type", path: "userType" },
@@ -57,14 +68,21 @@ const UsersTable = () => {
       content: (item) => {
         const variant =
           item.status === "active"
-            ? "success"
+            ? "text-success clickable"
             : item.status === "suspend"
-            ? "danger"
+            ? "text-danger clickable"
             : "dark";
-        return (
-          <Badge variant={variant}>
-            {item.status === "suspend" ? "suspended" : item.status}
-          </Badge>
+
+        return item.status === "suspend" ? (
+          <span className={variant}>
+            <FaToggleOff size={30} onClick={() => handleStatusClick(item)} />
+          </span>
+        ) : item.status === "active" ? (
+          <span className={variant}>
+            <FaToggleOn size={30} onClick={() => handleStatusClick(item)} />
+          </span>
+        ) : (
+          <Badge variant={variant}>{item.status}</Badge>
         );
       },
     },

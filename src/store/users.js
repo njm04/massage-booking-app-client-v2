@@ -112,6 +112,17 @@ export const editAccount = (accountId, account) => {
   });
 };
 
+export const updateStatus = (accountId, data) => {
+  return apiCallBegan({
+    url: `${url}/update-status/${accountId}`,
+    method: "PUT",
+    data,
+    onStart: usersRequested.type,
+    onSuccess: accountEdited.type,
+    onError: usersRequestFailed.type,
+  });
+};
+
 export const deleteAccount = (accountId) => {
   return apiCallBegan({
     url: `${url}/${accountId}`,
