@@ -1,10 +1,17 @@
 import React, { useState } from "react";
+import moment from "moment";
 import DatePicker from "react-datepicker";
-import { setHours, setMinutes, addDays } from "date-fns";
+import { setHours, setMinutes, getDay } from "date-fns";
 
 const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
   const [times, setTimes] = useState([]);
   const [chosenDate, setChosenDate] = useState(new Date());
+
+  const isWeekday = (date) => {
+    const day = getDay(date);
+    return day !== 0;
+  };
+
   const onCalendarOpen = () => {
     setTimes(
       schedules.map((schedule) => {
@@ -18,6 +25,12 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
         appointment if the chosen date is not equal to the reserved 
         date and current date
          */
+        if (value !== null && value.getDate() === date.getDate()) {
+          minutes = date.getMinutes();
+          hours = date.getHours();
+          return setHours(setMinutes(date, minutes), hours);
+        }
+
         if (
           new Date(chosenDate).getDate() !== date.getDate() &&
           new Date(chosenDate).getDate() !== currentDate.getDate()
@@ -30,6 +43,16 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
           hours = date.getHours();
           return setHours(setMinutes(date, minutes), hours);
         }
+
+        if (
+          date.getDate() === new Date(chosenDate).getDate() &&
+          date.getTime() !== new Date(chosenDate).getTime()
+        ) {
+          minutes = date.getMinutes();
+          hours = date.getHours();
+          return setHours(setMinutes(date, minutes), hours);
+        }
+
         return null;
       })
     );
@@ -42,7 +65,10 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
         let minutes = 0;
         let hours = 0;
         const date = new Date(schedule.date);
-        if (new Date(pickedDate).getDate() === date.getDate()) {
+        if (
+          new Date(pickedDate).getDate() === date.getDate() &&
+          new Date(pickedDate).getMonth() === date.getMonth()
+        ) {
           minutes = date.getMinutes();
           hours = date.getHours();
           return setHours(setMinutes(date, minutes), hours);
@@ -67,17 +93,11 @@ const ReactDatePicker = ({ value, onChange, schedules, disabled }) => {
       }}
       showTimeSelect
       excludeTimes={times}
+      minDate={moment().toDate()}
       minTime={setHours(setMinutes(new Date(), 0), 8)}
       maxTime={setHours(setMinutes(new Date(), 0), 18)}
       dateFormat="MMMM d, yyyy h:mm aa"
-      includeDates={[
-        new Date(),
-        addDays(new Date(), 1),
-        addDays(new Date(), 2),
-        addDays(new Date(), 3),
-        addDays(new Date(), 4),
-      ]}
-      // timeFormat="HH:mm"
+      filterDate={isWeekday}
     />
   );
 };
